@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <title>Kuiz Feqah: Najis</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fff9db;
+      padding: 20px;
+      text-align: center;
+    }
+    .question-box {
+      background: #ffffff;
+      border: 2px solid #fcd34d;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px auto;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #b45309;
+    }
+    .question-count {
+      font-weight: bold;
+      color: #b91c1c;
+      margin-bottom: 10px;
+    }
+    button {
+      background-color: #fbbf24;
+      color: black;
+      border: none;
+      padding: 10px 20px;
+      margin: 8px;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 80%;
+      max-width: 400px;
+    }
+    button:hover {
+      background-color: #f59e0b;
+    }
+    #result {
+      font-size: 22px;
+      font-weight: bold;
+      margin-top: 20px;
+      color: #15803d;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🌟 Kuiz Feqah: Najis</h1>
+<div id="quiz"></div>
+<div id="result"></div>
+
+<script>
+  const quiz = [
+    { question: "Apakah maksud najis?", choices: ["Benda yang bersih", "Benda yang kotor dan menghalang sah solat", "Makanan halal", "Air suci"], correct: 1 },
+    { question: "Najis terbahagi kepada berapa jenis?", choices: ["1", "2", "3", "4"], correct: 2 },
+    { question: "Najis Mukhaffafah ialah...", choices: ["Najis ringan", "Najis berat", "Najis pertengahan", "Najis keras"], correct: 0 },
+    { question: "Contoh Najis Mukhaffafah ialah...", choices: ["Najis manusia", "Kencing bayi lelaki bawah 2 tahun yang hanya minum susu ibu", "Darah", "Air liur anjing"], correct: 1 },
+    { question: "Najis Mutawassitah ialah...", choices: ["Najis ringan", "Najis pertengahan", "Najis berat", "Najis tidak perlu dibersihkan"], correct: 1 },
+    { question: "Contoh Najis Mutawassitah ialah...", choices: ["Kencing bayi", "Najis manusia dan haiwan", "Air yang bersih", "Makanan halal"], correct: 1 },
+    { question: "Cara menyucikan Najis Mukhaffafah ialah...", choices: ["Basuh 3 kali", "Basuh dengan air mutlak sekali", "Percik air mutlak sekali", "Lap dengan kain"], correct: 2 },
+    { question: "Najis Mughallazah ialah...", choices: ["Najis ringan", "Najis berat", "Najis sederhana", "Najis yang suci"], correct: 1 },
+    { question: "Contoh Najis Mughallazah ialah...", choices: ["Najis manusia", "Air liur anjing dan babi", "Kotoran biasa", "Air susu"], correct: 1 },
+    { question: "Cara menyucikan Najis Mughallazah ialah...", choices: ["Lap kain bersih", "Basuh dengan air paip sahaja", "Basuh 7 kali salah satu air bercampur tanah", "Basuh sekali sahaja"], correct: 2 },
+    { question: "Apakah hukum bersolat dalam keadaan terkena najis?", choices: ["Wajib", "Sunat", "Makruh", "Tidak sah"], correct: 3 },
+    { question: "Air apa yang digunakan untuk menyucikan najis?", choices: ["Air kopi", "Air mutlak", "Air sirap", "Air laut sahaja"], correct: 1 },
+    { question: "Adakah kotoran dari binatang halal dimakan dikira najis?", choices: ["Ya", "Tidak", "Kadang-kadang", "Tidak pasti"], correct: 0 },
+    { question: "Apakah najis yang boleh dimaafkan?", choices: ["Semua najis", "Najis yang sukar dielakkan dan sedikit", "Najis besar", "Darah banyak"], correct: 1 },
+    { question: "Jika pakaian terkena najis, apa perlu dibuat?", choices: ["Buang pakaian", "Basuh hingga hilang bau, warna dan rasa", "Lap dengan tisu", "Biarkan saja"], correct: 1 },
+    { question: "Apakah jenis najis yang paling berat?", choices: ["Mutawassitah", "Mukhaffafah", "Mughallazah", "Kebiasaan"], correct: 2 },
+    { question: "Kenapa kita perlu bersihkan najis?", choices: ["Untuk cantik", "Untuk sah solat", "Untuk tidur lena", "Untuk disayangi kawan"], correct: 1 },
+    { question: "Adakah najis boleh menajiskan tempat solat?", choices: ["Ya", "Tidak", "Kadang-kadang", "Tidak pasti"], correct: 0 },
+    { question: "Najis mesti dibersihkan dengan...", choices: ["Air hujan sahaja", "Air mutlak", "Sabun sahaja", "Air sejuk sahaja"], correct: 1 },
+    { question: "Kencing bayi perempuan yang hanya minum susu ibu dikira...", choices: ["Mukhaffafah", "Mutawassitah", "Mughallazah", "Bukan najis"], correct: 1 }
+  ];
+
+  let current = 0;
+  let score = 0;
+  let shuffled = quiz.sort(() => 0.5 - Math.random());
+
+  function loadQuestion() {
+    if (current >= shuffled.length) {
+      const total = shuffled.length * 5;
+      let msg = score === total ? "🌟 Hebat! Semua betul!" : score >= 60 ? "👍 Bagus! Cuba penuh markah!" : "📘 Teruskan berusaha!";
+      document.getElementById("quiz").innerHTML = '';
+      document.getElementById("result").innerHTML = `Markah akhir: ${score}/${total}<br>${msg}`;
+      return;
+    }
+
+    const q = shuffled[current];
+    let html = `
+      <div class="question-box">
+        <div class="question-count">Soalan ${current + 1} / ${shuffled.length}</div>
+        <h3>${q.question}</h3>
+    `;
+    q.choices.forEach((c, i) => {
+      html += `<button onclick="checkAnswer(${i})">${c}</button>`;
+    });
+    html += `</div>`;
+    document.getElementById("quiz").innerHTML = html;
+  }
+
+  function checkAnswer(selected) {
+    const q = shuffled[current];
+    if (selected === q.correct) {
+      score += 5;
+    }
+    current++;
+    loadQuestion();
+  }
+
+  loadQuestion();
+</script>
+
+</body>
+</html>
