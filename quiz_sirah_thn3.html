@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <title>Kuiz Sirah Tahun 3</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fef9c3;
+      padding: 20px;
+      text-align: center;
+    }
+    .question-box {
+      background: #fffbe6;
+      border: 2px solid #facc15;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px auto;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #ca8a04;
+    }
+    .question-count {
+      font-weight: bold;
+      color: #b91c1c;
+      margin-bottom: 10px;
+    }
+    button {
+      background-color: #38bdf8;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 8px;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 80%;
+      max-width: 400px;
+    }
+    button:hover {
+      background-color: #0ea5e9;
+    }
+    #result {
+      font-size: 22px;
+      font-weight: bold;
+      margin-top: 20px;
+      color: #10b981;
+    }
+    #feedback {
+      margin-top: 10px;
+      color: #d97706;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🌟 Kuiz Sirah: Tahun 3 </h1>
+<div id="quiz"></div>
+<div id="result"></div>
+
+<script>
+const originalQuiz = [
+  // 10 soalan Nasab Nabi Muhammad
+  {question: "Siapakah nama ayah Nabi Muhammad?", choices: ["Abdullah", "Abu Talib", "Abdul Muttalib", "Hamzah"], correct: 0},
+  {question: "Siapakah datuk Nabi Muhammad?", choices: ["Abdullah", "Abdul Muttalib", "Abu Lahab", "Ali"], correct: 1},
+  {question: "Nama ibu Nabi Muhammad ialah...", choices: ["Khadijah", "Aisyah", "Aminah", "Fatimah"], correct: 2},
+  {question: "Siapakah penjaga Nabi Muhammad selepas ibunya wafat?", choices: ["Abu Talib", "Abdullah", "Abdul Muttalib", "Hamzah"], correct: 2},
+  {question: "Siapakah bapa saudara Nabi yang membela baginda?", choices: ["Abu Lahab", "Abu Talib", "Abbas", "Ali"], correct: 1},
+  {question: "Nabi Muhammad berasal dari keturunan...", choices: ["Bani Hasyim", "Bani Abbas", "Bani Umayyah", "Bani Israel"], correct: 0},
+  {question: "Keturunan Nabi Muhammad berasal dari Nabi...", choices: ["Nabi Musa", "Nabi Isa", "Nabi Ibrahim", "Nabi Nuh"], correct: 2},
+  {question: "Apakah nama lengkap Nabi Muhammad?", choices: ["Muhammad bin Abu Talib", "Muhammad bin Abdullah", "Muhammad bin Abdul Muttalib", "Muhammad bin Hamzah"], correct: 1},
+  {question: "Siapakah ibu susuan Nabi Muhammad?", choices: ["Aminah", "Khadijah", "Halimatus Saadiah", "Fatimah"], correct: 2},
+  {question: "Nabi Muhammad lahir di kota...", choices: ["Madinah", "Taif", "Mekah", "Yaman"], correct: 2},
+
+  // 5 soalan Peristiwa Kelahiran Nabi Muhammad
+  {question: "Tahun kelahiran Nabi Muhammad dikenali sebagai...", choices: ["Tahun Hijrah", "Tahun Gajah", "Tahun Mekah", "Tahun Nur"], correct: 1},
+  {question: "Apakah yang berlaku ketika tahun kelahiran Nabi Muhammad?", choices: ["Perang Badar", "Peristiwa Gajah", "Hijrah ke Madinah", "Pembukaan Mekah"], correct: 1},
+  {question: "Siapakah raja yang ingin menyerang Kaabah semasa Nabi lahir?", choices: ["Raja Heraklius", "Raja Habsyah", "Abrahah", "Firaun"], correct: 2},
+  {question: "Apakah nama surah yang berkaitan dengan kelahiran Nabi?", choices: ["Al-Fil", "An-Nas", "Al-Ikhlas", "Al-Qadr"], correct: 0},
+  {question: "Siapakah yang memelihara Kaabah daripada serangan Abrahah?", choices: ["Penduduk Mekah", "Nabi Muhammad", "Tentera bergajah", "Burung Ababil"], correct: 3},
+
+  // 10 soalan Akhlak Nabi Muhammad
+  {question: "Apakah gelaran Nabi Muhammad oleh kaumnya?", choices: ["As-Sabiqun", "Al-Amin", "Al-Faruq", "Al-Mujahid"], correct: 1},
+  {question: "Nabi Muhammad seorang yang...", choices: ["pendendam", "pemarah", "penyayang", "pemalas"], correct: 2},
+  {question: "Bagaimana Nabi melayan kanak-kanak?", choices: ["Marah", "Benci", "Pukul", "Kasih sayang"], correct: 3},
+  {question: "Nabi Muhammad suka membantu...", choices: ["Orang kaya", "Orang miskin", "Orang sombong", "Orang kuat"], correct: 1},
+  {question: "Nabi sentiasa berkata...", choices: ["bohong", "benar", "kasar", "jahat"], correct: 1},
+  {question: "Nabi suka menyuruh umatnya bersikap...", choices: ["malas", "sombong", "jujur", "dengki"], correct: 2},
+  {question: "Nabi seorang yang...", choices: ["sombong", "rendah diri", "pemarah", "pendusta"], correct: 1},
+  {question: "Nabi suka memberi...", choices: ["barang lama", "harta orang", "sedekah", "hutang"], correct: 2},
+  {question: "Apakah sikap Nabi dalam berjanji?", choices: ["Lupa", "Suka mungkir", "Menepati janji", "Tidak peduli"], correct: 2},
+  {question: "Nabi melayan musuh dengan...", choices: ["kekerasan", "dendam", "kemaafan", "balas dendam"], correct: 2},
+];
+
+let quiz = [];
+let current = 0;
+let score = 0;
+let totalTime = 40 * 60; // 40 minit
+let timer;
+
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function startQuiz() {
+  quiz = shuffle([...originalQuiz]);
+  current = 0;
+  score = 0;
+  totalTime = 40 * 60;
+  clearInterval(timer);
+  startTimer();
+  loadQuestion();
+}
+
+function startTimer() {
+  updateTimerDisplay();
+  timer = setInterval(() => {
+    totalTime--;
+    updateTimerDisplay();
+    if (totalTime <= 0) {
+      clearInterval(timer);
+      showFinalResult();
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const minutes = Math.floor(totalTime / 60);
+  const seconds = totalTime % 60;
+  const display = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  const counter = document.querySelector(".question-count span#timerDisplay");
+  if (counter) counter.textContent = display;
+}
+
+function loadQuestion() {
+  if (current >= quiz.length) {
+    clearInterval(timer);
+    showFinalResult();
+    return;
+  }
+
+  const q = quiz[current];
+  let html = `
+    <div class="question-box">
+      <div class="question-count">Soalan ${current + 1} / ${quiz.length} | Masa: <span id="timerDisplay"></span></div>
+      <h3>${q.question}</h3>
+  `;
+
+  const shuffledChoices = shuffle([...q.choices]);
+  shuffledChoices.forEach((c) => {
+    html += `<button onclick="checkAnswer('${c}', '${q.choices[q.correct]}')">${c}</button>`;
+  });
+
+  html += `<div id="feedback"></div></div>`;
+  document.getElementById("quiz").innerHTML = html;
+  updateTimerDisplay();
+}
+
+function checkAnswer(selected, correctAnswer) {
+  const feedback = document.getElementById("feedback");
+  if (selected === correctAnswer) {
+    feedback.innerHTML = "✅ Betul! +4 markah";
+    score += 4;
+  } else {
+    feedback.innerHTML = `❌ Salah. Jawapan betul: <strong>${correctAnswer}</strong>`;
+  }
+  setTimeout(() => {
+    current++;
+    loadQuestion();
+  }, 1000);
+}
+
+function showFinalResult() {
+  const total = quiz.length * 4;
+  let msg = score === total ? "🌟 Hebat! Semua betul!" : score >= 80 ? "👍 Bagus! Cuba penuh markah!" : "📘 Teruskan berusaha!";
+  let html = `Markah akhir: ${score}/${total}<br>${msg}`;
+  if (score < 80) html += `<br><button onclick="startQuiz()">Cuba Semula</button>`;
+  document.getElementById("quiz").innerHTML = '';
+  document.getElementById("result").innerHTML = html;
+}
+
+startQuiz();
+</script>
+
+</body>
+</html>
