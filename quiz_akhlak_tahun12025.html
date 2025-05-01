@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Kuiz Akhlak Kanak-kanak</title>
   <style>
     body {
@@ -12,7 +12,7 @@
     }
     .question-box {
       background: #ffffff;
-      border: 2px solid #fcd34d;
+      border: 2px solid #fbc02d;
       border-radius: 12px;
       padding: 20px;
       margin: 20px auto;
@@ -44,15 +44,15 @@
       background-color: #0ea5e9;
     }
     #result {
-      font-size: 22px;
+      font-size: 20px;
       font-weight: bold;
       margin-top: 20px;
       color: #10b981;
     }
-    .feedback {
+    #feedback {
       font-size: 18px;
-      margin-top: 10px;
       color: #ef4444;
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -60,11 +60,11 @@
 
 <h1>🌟 Kuiz Akhlak: Adab Makan & Tidur</h1>
 <div id="quiz"></div>
-<div id="feedback" class="feedback"></div>
 <div id="result"></div>
+<div id="feedback"></div>
 
 <script>
-  const quiz = [
+  const originalQuiz = [
     {
       question: "Apakah yang perlu dibaca sebelum makan?",
       choices: ["Bismillah", "Al-Fatihah", "Azan", "Doa Qunut"],
