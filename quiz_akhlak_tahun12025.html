@@ -167,16 +167,29 @@
     }
   ];
 
+  let quiz = [];
   let current = 0;
   let score = 0;
 
+  function shuffle(array) {
+    let copy = [...array];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+
   function loadQuestion() {
-    document.getElementById("feedback").innerText = "";
     if (current >= quiz.length) {
       const total = quiz.length * 5;
-      let msg = score === total ? "🌟 Hebat! Semua betul!" : score >= 60 ? "👍 Bagus! Cuba penuh markah!" : "📘 Teruskan berusaha!";
-      document.getElementById("quiz").innerHTML = '';
-      document.getElementById("result").innerHTML = `Markah akhir: ${score}/${total}<br>${msg}`;
+      let msg = score === total ? "🌟 Hebat! Semua betul!" : score >= 90 ? "👍 Bagus! Cuba capai 100 markah!" : "📘 Cuba lagi untuk lebih baik!";
+      let html = `<div id="result">Markah akhir: ${score}/${total}<br>${msg}</div>`;
+      if (score < 90) {
+        html += `<br><button onclick="restartQuiz()">Cuba Lagi</button>`;
+      }
+      document.getElementById("quiz").innerHTML = html;
+      document.getElementById("feedback").innerText = "";
       return;
     }
 
@@ -191,21 +204,30 @@
     });
     html += `</div>`;
     document.getElementById("quiz").innerHTML = html;
+    document.getElementById("feedback").innerText = "";
   }
 
   function checkAnswer(selected) {
-    const correct = quiz[current].correct;
-    if (selected === correct) {
-      document.getElementById("feedback").innerText = "✅ Betul! +5 markah";
+    const q = quiz[current];
+    if (selected === q.correct) {
       score += 5;
+      document.getElementById("feedback").innerText = "✅ Betul!";
     } else {
-      document.getElementById("feedback").innerText = "❌ Salah. Jawapan betul: " + quiz[current].choices[correct];
+      document.getElementById("feedback").innerText = `❌ Salah. Jawapan yang betul: ${q.choices[q.correct]}`;
     }
     current++;
-    setTimeout(loadQuestion, 1200); // auto-load next question
+    setTimeout(loadQuestion, 1200);
   }
 
-  loadQuestion();
+  function restartQuiz() {
+    quiz = shuffle(originalQuiz).slice(0, 20);
+    current = 0;
+    score = 0;
+    loadQuestion();
+  }
+
+  // Mula kuiz
+  restartQuiz();
 </script>
 
 </body>
