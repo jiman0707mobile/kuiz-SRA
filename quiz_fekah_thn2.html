@@ -56,9 +56,10 @@
 <h1>🌟 Kuiz Feqah: Najis</h1>
 <div id="quiz"></div>
 <div id="result"></div>
+<div id="feedback"></div>
 
 <script>
-  const quiz = [
+  const originalQuiz = [
     { question: "Apakah maksud najis?", choices: ["Benda yang bersih", "Benda yang kotor dan menghalang sah solat", "Makanan halal", "Air suci"], correct: 1 },
     { question: "Najis terbahagi kepada berapa jenis?", choices: ["1", "2", "3", "4"], correct: 2 },
     { question: "Najis Mukhaffafah ialah...", choices: ["Najis ringan", "Najis berat", "Najis pertengahan", "Najis keras"], correct: 0 },
@@ -81,23 +82,36 @@
     { question: "Kencing bayi perempuan yang hanya minum susu ibu dikira...", choices: ["Mukhaffafah", "Mutawassitah", "Mughallazah", "Bukan najis"], correct: 1 }
   ];
 
+  let quiz = [];
   let current = 0;
   let score = 0;
-  let shuffled = quiz.sort(() => 0.5 - Math.random());
+
+  function shuffle(array) {
+    let copy = [...array];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
 
   function loadQuestion() {
-    if (current >= shuffled.length) {
-      const total = shuffled.length * 5;
-      let msg = score === total ? "🌟 Hebat! Semua betul!" : score >= 60 ? "👍 Bagus! Cuba penuh markah!" : "📘 Teruskan berusaha!";
-      document.getElementById("quiz").innerHTML = '';
-      document.getElementById("result").innerHTML = `Markah akhir: ${score}/${total}<br>${msg}`;
+    if (current >= quiz.length) {
+      const total = quiz.length * 5;
+      let msg = score === total ? "🌟 Hebat! Semua betul!" : score >= 90 ? "👍 Bagus! Cuba capai 100 markah!" : "📘 Cuba lagi untuk lebih baik!";
+      let html = `<div id="result">Markah akhir: ${score}/${total}<br>${msg}</div>`;
+      if (score < 90) {
+        html += `<br><button onclick="restartQuiz()">Cuba Lagi</button>`;
+      }
+      document.getElementById("quiz").innerHTML = html;
+      document.getElementById("feedback").innerText = "";
       return;
     }
 
-    const q = shuffled[current];
+    const q = quiz[current];
     let html = `
       <div class="question-box">
-        <div class="question-count">Soalan ${current + 1} / ${shuffled.length}</div>
+        <div class="question-count">Soalan ${current + 1} / ${quiz.length}</div>
         <h3>${q.question}</h3>
     `;
     q.choices.forEach((c, i) => {
@@ -105,18 +119,30 @@
     });
     html += `</div>`;
     document.getElementById("quiz").innerHTML = html;
+    document.getElementById("feedback").innerText = "";
   }
 
   function checkAnswer(selected) {
-    const q = shuffled[current];
+    const q = quiz[current];
     if (selected === q.correct) {
       score += 5;
+      document.getElementById("feedback").innerText = "✅ Betul!";
+    } else {
+      document.getElementById("feedback").innerText = `❌ Salah. Jawapan yang betul: ${q.choices[q.correct]}`;
     }
     current++;
+    setTimeout(loadQuestion, 1200);
+  }
+
+  function restartQuiz() {
+    quiz = shuffle(originalQuiz).slice(0, 20);
+    current = 0;
+    score = 0;
     loadQuestion();
   }
 
-  loadQuestion();
+  // Mula kuiz
+  restartQuiz();
 </script>
 
 </body>
