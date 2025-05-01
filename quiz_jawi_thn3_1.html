@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <title>Kuiz Jawi Tahun 3</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fef9c3;
+      padding: 20px;
+      text-align: center;
+    }
+    .question-box {
+      background: #fffbe6;
+      border: 2px solid #facc15;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px auto;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #ca8a04;
+    }
+    .question-count {
+      font-weight: bold;
+      color: #b91c1c;
+      margin-bottom: 10px;
+    }
+    button {
+      background-color: #38bdf8;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 8px;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 80%;
+      max-width: 400px;
+    }
+    button:hover {
+      background-color: #0ea5e9;
+    }
+    #result {
+      font-size: 22px;
+      font-weight: bold;
+      margin-top: 20px;
+      color: #10b981;
+    }
+    #feedback {
+      margin-top: 10px;
+      color: #d97706;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🌟 Kuiz Jawi: Tahun 3 </h1>
+<div id="quiz"></div>
+<div id="result"></div>
+
+<script>
+const originalQuiz = [
+  {
+    question: "Yang manakah perkataan Jawi yang berakhir dengan huruf **qaf (ق)**?",
+    choices: ["كتاب", "قلم", "طبق", "مدرسة"],
+    correct: 2
+  },
+  {
+    question: "Pilih perkataan Jawi yang berakhir dengan huruf **kaf (ك)**.",
+    choices: ["ملك", "باب", "بيت", "كتاب"],
+    correct: 0
+  },
+  {
+    question: "Perkataan manakah yang berakhir dengan huruf **qaf (ق)** dalam tulisan Jawi?",
+    choices: ["ورق", "علم", "مكتب", "موز"],
+    correct: 0
+  },
+  {
+    question: "Pilih perkataan yang **bukan** berakhir dengan huruf **kaf (ك)**.",
+    choices: ["فك", "مبارك", "ملك", "مركز"],
+    correct: 3
+  },
+  {
+    question: "Yang manakah ditulis dalam Jawi dan berakhir dengan huruf **ق**?",
+    choices: ["نور", "طبق", "بيت", "باب"],
+    correct: 1
+  },
+  {
+    question: "Pilih perkataan yang berakhir dengan huruf **gha (غ)**.",
+    choices: ["كبير", "سلم", "فرغ", "فهم"],
+    correct: 2
+  },
+  {
+    question: "Yang manakah perkataan Jawi yang berakhir dengan huruf **ك**?",
+    choices: ["ملك", "كتب", "نور", "علم"],
+    correct: 0
+  },
+  {
+    question: "Perkataan **فرغ** berakhir dengan huruf apa?",
+    choices: ["ج", "غ", "ف", "ر"],
+    correct: 1
+  },
+  {
+    question: "Yang manakah perkataan yang berakhir dengan huruf **gha (غ)** dalam Jawi?",
+    choices: ["ملك", "طبق", "فرغ", "موز"],
+    correct: 2
+  },
+  {
+    question: "Pilih perkataan yang tidak berakhir dengan huruf **gha (غ)**.",
+    choices: ["فرغ", "بلغ", "مغ", "ملك"],
+    correct: 3
+  },
+
+  {
+    question: "Yang manakah contoh perkataan suku kata terbuka dengan **vokal a-a**?",
+    choices: ["sapu", "buku", "tahu", "bapa"],
+    correct: 3
+  },
+  {
+    question: "Pilih perkataan dengan pola vokal **a-a**.",
+    choices: ["mata", "ciku", "tahi", "susu"],
+    correct: 0
+  },
+  {
+    question: "Manakah berikut ialah perkataan dengan suku kata terbuka pola **a-a**?",
+    choices: ["bata", "buku", "tahu", "kita"],
+    correct: 0
+  },
+  {
+    question: "Apakah pola suku kata dalam perkataan **bapa**?",
+    choices: ["u-a", "a-i", "i-u", "a-a"],
+    correct: 3
+  },
+  {
+    question: "Pilih perkataan yang tidak mengandungi suku kata pola vokal **a-a**.",
+    choices: ["batu", "baju", "bapa", "mata"],
+    correct: 0
+  },
+  {
+    question: "Perkataan **mama** dalam Jawi mempunyai pola suku kata?",
+    choices: ["a-u", "i-i", "a-a", "u-a"],
+    correct: 2
+  },
+  {
+    question: "Pilih perkataan yang mempunyai pola vokal **a-a** dan ditulis dalam Jawi.",
+    choices: ["bapa", "buku", "mimi", "kaki"],
+    correct: 0
+  },
+  {
+    question: "Apakah pola vokal untuk perkataan **tapa**?",
+    choices: ["u-a", "a-i", "a-a", "i-a"],
+    correct: 2
+  },
+  {
+    question: "Manakah contoh betul suku kata terbuka vokal **a-a**?",
+    choices: ["tahi", "mata", "cucu", "mimi"],
+    correct: 1
+  },
+  {
+    question: "Pilih perkataan yang sesuai dengan pola **a-a** dalam Jawi.",
+    choices: ["susu", "mata", "ciku", "kutu"],
+    correct: 1
+  }
+];
+
+
+let quiz = [];
+let current = 0;
+let score = 0;
+let totalTime = 40 * 60; // 40 minit
+let timer;
+
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function startQuiz() {
+  quiz = shuffle([...originalQuiz]);
+  current = 0;
+  score = 0;
+  totalTime = 40 * 60;
+  clearInterval(timer);
+  startTimer();
+  loadQuestion();
+}
+
+function startTimer() {
+  updateTimerDisplay();
+  timer = setInterval(() => {
+    totalTime--;
+    updateTimerDisplay();
+    if (totalTime <= 0) {
+      clearInterval(timer);
+      showFinalResult();
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const minutes = Math.floor(totalTime / 60);
+  const seconds = totalTime % 60;
+  const display = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  const counter = document.querySelector(".question-count span#timerDisplay");
+  if (counter) counter.textContent = display;
+}
+
+function loadQuestion() {
+  if (current >= quiz.length) {
+    clearInterval(timer);
+    showFinalResult();
+    return;
+  }
+
+  const q = quiz[current];
+  let html = `
+    <div class="question-box">
+      <div class="question-count">Soalan ${current + 1} / ${quiz.length} | Masa: <span id="timerDisplay"></span></div>
+      <h3>${q.question}</h3>
+  `;
+
+  const shuffledChoices = shuffle([...q.choices]);
+  shuffledChoices.forEach((c) => {
+    html += `<button onclick="checkAnswer('${c}', '${q.choices[q.correct]}')">${c}</button>`;
+  });
+
+  html += `<div id="feedback"></div></div>`;
+  document.getElementById("quiz").innerHTML = html;
+  updateTimerDisplay();
+}
+
+function checkAnswer(selected, correctAnswer) {
+  const feedback = document.getElementById("feedback");
+  if (selected === correctAnswer) {
+    feedback.innerHTML = "✅ Betul! +4 markah";
+    score += 4;
+  } else {
+    feedback.innerHTML = `❌ Salah. Jawapan betul: <strong>${correctAnswer}</strong>`;
+  }
+  setTimeout(() => {
+    current++;
+    loadQuestion();
+  }, 1000);
+}
+
+function showFinalResult() {
+  const total = quiz.length * 4;
+  let msg = score === total ? "🌟 Hebat! Semua betul!" : score >= 80 ? "👍 Bagus! Cuba penuh markah!" : "📘 Teruskan berusaha!";
+  let html = `Markah akhir: ${score}/${total}<br>${msg}`;
+  if (score < 80) html += `<br><button onclick="startQuiz()">Cuba Semula</button>`;
+  document.getElementById("quiz").innerHTML = '';
+  document.getElementById("result").innerHTML = html;
+}
+
+startQuiz();
+</script>
+
+</body>
+</html>

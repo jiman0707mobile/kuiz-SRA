@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <title>Kuiz Jawi</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #cceeff;
+      padding: 20px;
+      text-align: center;
+    }
+    .question-box {
+      background: #ffffff;
+      border: 2px solid #60a5fa;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px auto;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #2563eb;
+    }
+    .question-count {
+      font-weight: bold;
+      color: #1d4ed8;
+      margin-bottom: 10px;
+    }
+    button {
+      background-color: #3b82f6;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 8px;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 80%;
+      max-width: 400px;
+    }
+    button:hover {
+      background-color: #2563eb;
+    }
+    #result {
+      font-size: 22px;
+      font-weight: bold;
+      margin-top: 20px;
+      color: #059669;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🕌 Kuiz Jawi Tahun 3</h1>
+<div id="quiz"></div>
+<div id="result"></div>
+<div id="feedback"></div>
+
+<script>
+  const originalQuiz = [
+  {
+    question: "Perkataan manakah yang berakhir dengan huruf ق?",
+    choices: ["ورق", "ملاك", "ملك", "علم"],
+    correct: 0
+  },
+  {
+    question: "Manakah perkataan yang berakhir dengan huruf ك?",
+    choices: ["طبق", "ملاك", "خالد", "جميل"],
+    correct: 1
+  },
+  {
+    question: "Pilih perkataan yang berakhir dengan huruf غ.",
+    choices: ["فرغ", "ملك", "باب", "نور"],
+    correct: 0
+  },
+  {
+    question: "Pilih perkataan suku kata terbuka dengan pola vokal a-a.",
+    choices: ["بانا", "تيمي", "سيف", "نهر"],
+    correct: 0
+  },
+  {
+    question: "Perkataan manakah yang mengandungi suku kata terbuka a-a?",
+    choices: ["لاما", "ملك", "كبير", "حسن"],
+    correct: 0
+  },
+  {
+    question: "Yang manakah perkataan berakhir dengan huruf ق?",
+    choices: ["حدق", "ملك", "فرغ", "سراج"],
+    correct: 0
+  },
+  {
+    question: "Perkataan 'طباك' berakhir dengan huruf apa?",
+    choices: ["ق", "ك", "غ", "ج"],
+    correct: 1
+  },
+  {
+    question: "Perkataan 'فرغ' bermaksud?",
+    choices: ["Kosong", "Penuh", "Cerah", "Senyap"],
+    correct: 0
+  },
+  {
+    question: "Perkataan manakah yang mempunyai pola vokal a-a dan suku kata terbuka?",
+    choices: ["سما", "علم", "كبير", "جميل"],
+    correct: 0
+  },
+  {
+    question: "Perkataan 'جبل' dalam tulisan Rumi ialah?",
+    choices: ["jabal", "jubal", "jibil", "jibel"],
+    correct: 0
+  },
+
+  {
+    question: "Pilih perkataan yang mengandungi huruf ق dan suku kata terbuka.",
+    choices: ["فاقا", "طبق", "ملك", "كبير"],
+    correct: 0
+  },
+  {
+    question: "Yang manakah bukan suku kata terbuka?",
+    choices: ["كا", "تا", "كم", "با"],
+    correct: 2
+  },
+  {
+    question: "Manakah perkataan yang bukan berakhir dengan huruf kaf?",
+    choices: ["ملاك", "طبق", "قلم", "ملك"],
+    correct: 2
+  },
+  {
+    question: "Pilih perkataan yang mengandungi dua huruf bersambung dan berakhir dengan غ.",
+    choices: ["فرغ", "ملك", "سيف", "كتاب"],
+    correct: 0
+  },
+  {
+    question: "Perkataan 'فارا' dalam tulisan Rumi ialah?",
+    choices: ["fara", "fira", "fura", "fera"],
+    correct: 0
+  },
+  {
+    question: "Perkataan yang mempunyai dua suku kata terbuka?",
+    choices: ["لاما", "ملك", "نجم", "سيف"],
+    correct: 0
+  },
+  {
+    question: "Perkataan manakah yang tidak mengandungi huruf kaf?",
+    choices: ["كتاب", "طبق", "نور", "ملك"],
+    correct: 2
+  },
+  {
+    question: "Pilih perkataan yang berakhir dengan huruf gha (غ).",
+    choices: ["فرغ", "ملك", "نور", "جبل"],
+    correct: 0
+  },
+  {
+    question: "Tulisan Jawi bagi 'malaq' ialah?",
+    choices: ["ملاق", "ملك", "ملاك", "ملاقق"],
+    correct: 0
+  },
+  {
+    question: "Tulisan Jawi bagi 'faqa' ialah?",
+    choices: ["فاقا", "فكا", "فكاك", "فاكا"],
+    correct: 0
+  }
+];
+
+
+
+  let quiz = [];
+  let current = 0;
+  let score = 0;
+
+  function shuffle(array) {
+    let copy = [...array];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+
+  function loadQuestion() {
+    if (current >= quiz.length) {
+      const total = quiz.length * 5;
+      let msg = score === total ? "🌟 Hebat! Semua betul!" : score >= 90 ? "👍 Bagus! Cuba capai 100 markah!" : "📘 Cuba lagi untuk lebih baik!";
+      let html = `<div id="result">Markah akhir: ${score}/${total}<br>${msg}</div>`;
+      if (score < 90) {
+        html += `<br><button onclick="restartQuiz()">Cuba Lagi</button>`;
+      }
+      document.getElementById("quiz").innerHTML = html;
+      document.getElementById("feedback").innerText = "";
+      return;
+    }
+
+    const q = quiz[current];
+    let html = `
+      <div class="question-box">
+        <div class="question-count">Soalan ${current + 1} / ${quiz.length}</div>
+        <h3>${q.question}</h3>
+    `;
+    q.choices.forEach((c, i) => {
+      html += `<button onclick="checkAnswer(${i})">${c}</button>`;
+    });
+    html += `</div>`;
+    document.getElementById("quiz").innerHTML = html;
+    document.getElementById("feedback").innerText = "";
+  }
+
+  function checkAnswer(selected) {
+    const q = quiz[current];
+    if (selected === q.correct) {
+      score += 5;
+      document.getElementById("feedback").innerText = "✅ Betul!";
+    } else {
+      document.getElementById("feedback").innerText = `❌ Salah. Jawapan yang betul: ${q.choices[q.correct]}`;
+    }
+    current++;
+    setTimeout(loadQuestion, 1200);
+  }
+
+  function restartQuiz() {
+    quiz = shuffle(originalQuiz).slice(0, 20);
+    current = 0;
+    score = 0;
+    loadQuestion();
+  }
+
+  // Mula kuiz
+  restartQuiz();
+</script>
+  
+</body>
+</html>
