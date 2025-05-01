@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <title>Kuiz Tajwid Tahun 3</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fef9c3;
+      padding: 20px;
+      text-align: center;
+    }
+    .question-box {
+      background: #fffbe6;
+      border: 2px solid #facc15;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px auto;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #ca8a04;
+    }
+    .question-count {
+      font-weight: bold;
+      color: #b91c1c;
+      margin-bottom: 10px;
+    }
+    button {
+      background-color: #38bdf8;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 8px;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 80%;
+      max-width: 400px;
+    }
+    button:hover {
+      background-color: #0ea5e9;
+    }
+    #result {
+      font-size: 22px;
+      font-weight: bold;
+      margin-top: 20px;
+      color: #10b981;
+    }
+    #feedback {
+      margin-top: 10px;
+      color: #d97706;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🌟 Kuiz Tajwid: Tahun 3 </h1>
+<div id="quiz"></div>
+<div id="result"></div>
+
+<script>
+const originalQuiz = [
+  {
+    question: "Apakah maksud makhraj huruf?",
+    choices: ["Tempat keluar huruf", "Bunyi huruf", "Bentuk huruf", "Warna huruf"],
+    correct: 0
+  },
+  {
+    question: "Berapa huruf yang keluar dari makhraj Al-Jauf?",
+    choices: ["3", "2", "1", "4"],
+    correct: 0
+  },
+  {
+    question: "Huruf yang keluar dari Al-Jauf ialah...",
+    choices: ["ا و ي", "ب ت ث", "خ غ ع", "د ذ ر"],
+    correct: 0
+  },
+  {
+    question: "Huruf alif keluar dari...",
+    choices: ["Kerongkong", "Lidah", "Hidung", "Rongga mulut"],
+    correct: 3
+  },
+  {
+    question: "Huruf-huruf dari makhraj Al-Jauf mesti dibaca...",
+    choices: ["Tebal", "Cepat", "Dengan mad", "Dengan tanwin"],
+    correct: 2
+  },
+  {
+    question: "Huruf ‘و’ yang bersabdu dibaca dengan...",
+    choices: ["Panjang", "Laju", "Ringkas", "Tanwin"],
+    correct: 0
+  },
+  {
+    question: "Al-Jauf bermaksud...",
+    choices: ["Kerongkong", "Rongga dalam mulut", "Tepi lidah", "Bibir"],
+    correct: 1
+  },
+  {
+    question: "Huruf yang keluar dari tengah kerongkong ialah...",
+    choices: ["غ, خ", "ع, ح", "ق, ك", "ء, ه"],
+    correct: 1
+  },
+  {
+    question: "Makhraj Khalqi melibatkan...",
+    choices: ["Rongga mulut", "Kerongkong", "Lidah", "Bibir"],
+    correct: 1
+  },
+  {
+    question: "Huruf 'ء' dan 'هـ' keluar dari...",
+    choices: ["Hidung", "Hujung lidah", "Pangkal kerongkong", "Tepi mulut"],
+    correct: 2
+  },
+  {
+    question: "Huruf yang keluar dari bahagian paling bawah kerongkong ialah...",
+    choices: ["ع, ح", "غ, خ", "ء, هـ", "ق, ك"],
+    correct: 2
+  },
+  {
+    question: "Huruf 'غ' dan 'خ' keluar dari...",
+    choices: ["Tengah kerongkong", "Pangkal lidah", "Tepi mulut", "Tengah lidah"],
+    correct: 0
+  },
+  {
+    question: "Antara berikut, yang BUKAN dari makhraj Al-Jauf ialah...",
+    choices: ["ا", "و", "ي", "م"],
+    correct: 3
+  },
+  {
+    question: "Huruf dari Al-Jauf dibaca ketika huruf tersebut berbaris...",
+    choices: ["Sukun", "Kasrah", "Tanwin", "Madd"],
+    correct: 3
+  },
+  {
+    question: "Apabila huruf Al-Jauf dibaca tanpa baris panjang, bunyinya akan menjadi...",
+    choices: ["Kabur", "Pendek", "Salah", "Betul"],
+    correct: 2
+  },
+  {
+    question: "Berapa bahagian makhraj Khalqi?",
+    choices: ["3", "4", "2", "5"],
+    correct: 0
+  },
+  {
+    question: "Huruf dari kerongkong tengah perlu dibaca...",
+    choices: ["Dengan hidung", "Dengan jelas", "Dengan tebal", "Dengan cepat"],
+    correct: 1
+  },
+  {
+    question: "Huruf 'ح' dan 'ع' keluar dari...",
+    choices: ["Pangkal lidah", "Tengah kerongkong", "Bibir", "Rongga"],
+    correct: 1
+  },
+  {
+    question: "Huruf dari makhraj Khalqi adalah berkaitan dengan...",
+    choices: ["Rongga", "Kerongkong", "Lidah", "Hidung"],
+    correct: 1
+  },
+  {
+    question: "Membaca huruf Al-Jauf dengan betul membantu dalam...",
+    choices: ["Mengeja", "Melafaz mad", "Menulis", "Membaca baris atas"],
+    correct: 1
+  }
+];
+
+
+let quiz = [];
+let current = 0;
+let score = 0;
+let totalTime = 40 * 60; // 40 minit
+let timer;
+
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function startQuiz() {
+  quiz = shuffle([...originalQuiz]);
+  current = 0;
+  score = 0;
+  totalTime = 40 * 60;
+  clearInterval(timer);
+  startTimer();
+  loadQuestion();
+}
+
+function startTimer() {
+  updateTimerDisplay();
+  timer = setInterval(() => {
+    totalTime--;
+    updateTimerDisplay();
+    if (totalTime <= 0) {
+      clearInterval(timer);
+      showFinalResult();
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const minutes = Math.floor(totalTime / 60);
+  const seconds = totalTime % 60;
+  const display = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  const counter = document.querySelector(".question-count span#timerDisplay");
+  if (counter) counter.textContent = display;
+}
+
+function loadQuestion() {
+  if (current >= quiz.length) {
+    clearInterval(timer);
+    showFinalResult();
+    return;
+  }
+
+  const q = quiz[current];
+  let html = `
+    <div class="question-box">
+      <div class="question-count">Soalan ${current + 1} / ${quiz.length} | Masa: <span id="timerDisplay"></span></div>
+      <h3>${q.question}</h3>
+  `;
+
+  const shuffledChoices = shuffle([...q.choices]);
+  shuffledChoices.forEach((c) => {
+    html += `<button onclick="checkAnswer('${c}', '${q.choices[q.correct]}')">${c}</button>`;
+  });
+
+  html += `<div id="feedback"></div></div>`;
+  document.getElementById("quiz").innerHTML = html;
+  updateTimerDisplay();
+}
+
+function checkAnswer(selected, correctAnswer) {
+  const feedback = document.getElementById("feedback");
+  if (selected === correctAnswer) {
+    feedback.innerHTML = "✅ Betul! +5 markah";
+    score += 5;
+  } else {
+    feedback.innerHTML = `❌ Salah. Jawapan betul: <strong>${correctAnswer}</strong>`;
+  }
+  setTimeout(() => {
+    current++;
+    loadQuestion();
+  }, 1000);
+}
+
+function showFinalResult() {
+  const total = quiz.length * 5;
+  let msg = score === total ? "🌟 Hebat! Semua betul!" : score >= 80 ? "👍 Bagus! Cuba penuh markah!" : "📘 Teruskan berusaha!";
+  let html = `Markah akhir: ${score}/${total}<br>${msg}`;
+  if (score < 80) html += `<br><button onclick="startQuiz()">Cuba Semula</button>`;
+  document.getElementById("quiz").innerHTML = '';
+  document.getElementById("result").innerHTML = html;
+}
+
+startQuiz();
+</script>
+
+</body>
+</html>

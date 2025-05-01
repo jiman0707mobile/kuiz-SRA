@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <title>Kuiz Imlak</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fff9db;
+      padding: 20px;
+      text-align: center;
+    }
+    .question-box {
+      background: #ffffff;
+      border: 2px solid #fcd34d;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px auto;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #b45309;
+    }
+    .question-count {
+      font-weight: bold;
+      color: #b91c1c;
+      margin-bottom: 10px;
+    }
+    button {
+      background-color: #fbbf24;
+      color: black;
+      border: none;
+      padding: 10px 20px;
+      margin: 8px;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 80%;
+      max-width: 400px;
+    }
+    button:hover {
+      background-color: #f59e0b;
+    }
+    #result {
+      font-size: 22px;
+      font-weight: bold;
+      margin-top: 20px;
+      color: #15803d;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🌟 Kuiz Imlak </h1>
+<div id="quiz"></div>
+<div id="result"></div>
+<div id="feedback"></div>
+
+<script>
+const originalQuiz = [
+  {
+    question: "Apakah maksud 'Isim Mufrad Muzakkar'?",
+    choices: ["Kata nama dua lelaki", "Kata kerja lelaki", "Kata nama tunggal lelaki", "Kata nama perempuan"],
+    correct: 2
+  },
+  {
+    question: "Yang manakah contoh Isim Mufrad Muzakkar?",
+    choices: ["بِنْتٌ", "كِتَابَانِ", "وَلَدٌ", "وَلَدَانِ"],
+    correct: 2
+  },
+  {
+    question: "Yang manakah contoh Isim Musanna Muzakkar?",
+    choices: ["كِتَابٌ", "وَلَدَانِ", "بِنْتٌ", "كُرْسِيٌّ"],
+    correct: 1
+  },
+  {
+    question: "Kalimah 'مُعَلِّمٌ' tergolong dalam...",
+    choices: ["Isim Musanna Muzakkar", "Fi'il Madhi", "Isim Mufrad Muannas", "Isim Mufrad Muzakkar"],
+    correct: 3
+  },
+  {
+    question: "Kalimah 'مُعَلِّمَانِ' ialah contoh bagi...",
+    choices: ["Isim Musanna Muannas", "Isim Musanna Muzakkar", "Isim Mufrad Muzakkar", "Fi'il Mudhari'"],
+    correct: 1
+  },
+  {
+    question: "Apakah ciri akhir pada kalimah Isim Musanna Muzakkar?",
+    choices: ["Ta dan Marbuta", "Ya dan Ta", "Alif dan Nun", "Nun dan Ya"],
+    correct: 2
+  },
+  {
+    question: "Pilih kalimah yang bermaksud 'dua buku'.",
+    choices: ["كُرْسِيٌّ", "قَلَمَانِ", "كِتَابٌ", "كِتَابَانِ"],
+    correct: 3
+  },
+  {
+    question: "Kalimah 'قَلَمٌ' tergolong dalam kumpulan...",
+    choices: ["Fi'il Amar", "Isim Mufrad Muannas", "Isim Musanna Muzakkar", "Isim Mufrad Muzakkar"],
+    correct: 3
+  },
+  {
+    question: "Manakah bukan Isim Musanna Muzakkar?",
+    choices: ["مُدَرِّسَانِ", "كِتَابٌ", "وَلَدَانِ", "قَلَمَانِ"],
+    correct: 1
+  },
+  {
+    question: "Manakah antara berikut ialah bentuk jamak bagi 'وَلَدٌ'?",
+    choices: ["بَنَاتٌ", "وَلَدَانِ", "أَوْلَادٌ", "مُعَلِّمٌ"],
+    correct: 2
+  },
+
+  {
+    question: "Dalam ayat 'عِنْدِي كِتَابٌ وَقَلَمٌ', berapa Isim Mufrad Muzakkar?",
+    choices: ["1", "0", "2", "3"],
+    correct: 2
+  },
+  {
+    question: "Kenapa 'قَلَمَانِ' dianggap sebagai Isim Musanna Muzakkar?",
+    choices: ["Kerana jamak", "Kerana ia fi’il", "Kerana dua benda dan lelaki", "Kerana ia muannas"],
+    correct: 2
+  },
+  {
+    question: "Yang manakah menepati pola Isim Musanna Muzakkar sebenar?",
+    choices: ["مُعَلِّمُونَ", "مُعَلِّمَاتٌ", "مُعَلِّمَةٌ", "مُعَلِّمَانِ"],
+    correct: 3
+  },
+  {
+    question: "Pilih ayat yang mengandungi Isim Musanna Muzakkar dengan betul.",
+    choices: ["حَضَرَ مُعَلِّمَانِ إِلَى الْفَصْلِ", "ذَهَبَتْ بِنْتٌ إِلَى السُّوقِ", "أَكَلَ وَلَدٌ تُفَّاحَةً", "كُتُبٌ عَلَى الْمَكْتَبِ"],
+    correct: 0
+  },
+  {
+    question: "Apakah beza antara 'وَلَدٌ' dan 'وَلَدَانِ'?",
+    choices: ["Tiada beza", "Jenis kata kerja", "Jenis jantina", "Bilangan"],
+    correct: 3
+  },
+
+  {
+    question: "Kata 'أُسْتَاذٌ' bermaksud...",
+    choices: ["Kawan", "Guru lelaki", "Pelajar", "Guru perempuan"],
+    correct: 1
+  },
+  {
+    question: "Apakah bentuk dua bagi 'قَلَمٌ'?",
+    choices: ["قَلِمَةٌ", "قَلِيمٌ", "قَلَمٌ", "قَلَمَانِ"],
+    correct: 3
+  },
+  {
+    question: "Yang manakah kalimah isim mufrad muzakkar berkaitan anggota badan?",
+    choices: ["يَدٌ", "عَيْنٌ", "فَمٌ", "رَأْسٌ"],
+    correct: 3
+  },
+  {
+    question: "Pilih kalimah yang bukan Isim Mufrad Muzakkar.",
+    choices: ["كُرْسِيٌّ", "قَلَمٌ", "كِتَابٌ", "مِرْوَحَةٌ"],
+    correct: 3
+  },
+  {
+    question: "Apakah maksud 'مُدَرِّسَانِ'?",
+    choices: ["Guru dan murid", "Guru perempuan", "Dua orang guru lelaki", "Dua orang murid perempuan"],
+    correct: 2
+  }
+];
+
+
+
+  let quiz = [];
+  let current = 0;
+  let score = 0;
+
+  function shuffle(array) {
+    let copy = [...array];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+
+  function loadQuestion() {
+    if (current >= quiz.length) {
+      const total = quiz.length * 5;
+      let msg = score === total ? "🌟 Hebat! Semua betul!" : score >= 90 ? "👍 Bagus! Cuba capai 100 markah!" : "📘 Cuba lagi untuk lebih baik!";
+      let html = `<div id="result">Markah akhir: ${score}/${total}<br>${msg}</div>`;
+      if (score < 90) {
+        html += `<br><button onclick="restartQuiz()">Cuba Lagi</button>`;
+      }
+      document.getElementById("quiz").innerHTML = html;
+      document.getElementById("feedback").innerText = "";
+      return;
+    }
+
+    const q = quiz[current];
+    let html = `
+      <div class="question-box">
+        <div class="question-count">Soalan ${current + 1} / ${quiz.length}</div>
+        <h3>${q.question}</h3>
+    `;
+    q.choices.forEach((c, i) => {
+      html += `<button onclick="checkAnswer(${i})">${c}</button>`;
+    });
+    html += `</div>`;
+    document.getElementById("quiz").innerHTML = html;
+    document.getElementById("feedback").innerText = "";
+  }
+
+  function checkAnswer(selected) {
+    const q = quiz[current];
+    if (selected === q.correct) {
+      score += 5;
+      document.getElementById("feedback").innerText = "✅ Betul!";
+    } else {
+      document.getElementById("feedback").innerText = `❌ Salah. Jawapan yang betul: ${q.choices[q.correct]}`;
+    }
+    current++;
+    setTimeout(loadQuestion, 1200);
+  }
+
+  function restartQuiz() {
+    quiz = shuffle(originalQuiz).slice(0, 20);
+    current = 0;
+    score = 0;
+    loadQuestion();
+  }
+
+  // Mula kuiz
+  restartQuiz();
+</script>
+
+</body>
+</html>

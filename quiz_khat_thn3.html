@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <title>Kuiz Khat</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fff9db;
+      padding: 20px;
+      text-align: center;
+    }
+    .question-box {
+      background: #ffffff;
+      border: 2px solid #fcd34d;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px auto;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #b45309;
+    }
+    .question-count {
+      font-weight: bold;
+      color: #b91c1c;
+      margin-bottom: 10px;
+    }
+    button {
+      background-color: #fbbf24;
+      color: black;
+      border: none;
+      padding: 10px 20px;
+      margin: 8px;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 80%;
+      max-width: 400px;
+    }
+    button:hover {
+      background-color: #f59e0b;
+    }
+    #result {
+      font-size: 22px;
+      font-weight: bold;
+      margin-top: 20px;
+      color: #15803d;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🌟 Kuiz Khat </h1>
+<div id="quiz"></div>
+<div id="result"></div>
+<div id="feedback"></div>
+
+<script>
+const originalQuiz = [
+  {
+    question: "Apakah nama alat utama untuk menulis khat?",
+    choices: ["Beras", "Qalam", "Pena biru", "Pensel"],
+    correct: 1
+  },
+  {
+    question: "Apakah bahan utama qalam tradisional?",
+    choices: ["Kayu keras", "Buluh", "Besi", "Plastik"],
+    correct: 1
+  },
+  {
+    question: "Dakwat untuk khat biasanya berwarna...",
+    choices: ["Merah", "Biru", "Hitam", "Hijau"],
+    correct: 2
+  },
+  {
+    question: "Permukaan terbaik untuk menulis khat ialah...",
+    choices: ["Kertas pasir", "Kain kapas", "Kertas licin", "Kadbod tebal"],
+    correct: 2
+  },
+  {
+    question: "Bentuk asas dalam khat dikenali sebagai...",
+    choices: ["Baris", "Titik", "Huruf", "Pangkah"],
+    correct: 1
+  },
+  {
+    question: "Berapakah bentuk titik asas dalam kaedah khat Naskhi?",
+    choices: ["5", "7", "3", "6"],
+    correct: 2
+  },
+  {
+    question: "Titik digunakan dalam khat untuk menentukan...",
+    choices: ["Warna", "Ukuran dan proporsi", "Huruf vokal", "Kelajuan menulis"],
+    correct: 1
+  },
+  {
+    question: "Peralatan ini digunakan untuk menyimpan dakwat...",
+    choices: ["Pena", "Botol", "Mangkuk dakwat", "Tapak qalam"],
+    correct: 2
+  },
+  {
+    question: "Qalam biasanya dipotong pada sudut...",
+    choices: ["90 darjah", "30 darjah", "45 darjah", "15 darjah"],
+    correct: 2
+  },
+  {
+    question: "Apakah fungsi titik dalam kaedah khat?",
+    choices: ["Menghias huruf", "Menentukan besar huruf", "Membezakan baris", "Menanda akhir ayat"],
+    correct: 1
+  },
+  {
+    question: "Bagaimanakah kaedah titik digunakan dalam penulisan huruf alif dalam khat?",
+    choices: ["1 titik mendatar", "2 titik menegak", "3 titik menegak", "1 titik menegak"],
+    correct: 3
+  },
+  {
+    question: "Qalam perlu dicelup dalam dakwat dengan cara...",
+    choices: ["Menarik secara kuat", "Mencelup keseluruhan", "Sedikit sahaja hujungnya", "Membasuh qalam dahulu"],
+    correct: 2
+  },
+  {
+    question: "Qalam boleh menghasilkan huruf yang cantik kerana...",
+    choices: ["Ia mahal", "Sudut potongannya", "Warna qalam", "Bentuk dakwat"],
+    correct: 1
+  },
+  {
+    question: "Huruf-huruf dalam khat disusun berdasarkan...",
+    choices: ["Warna dan gaya", "Jumlah titik", "Kehendak guru", "Kaedah ukuran titik"],
+    correct: 3
+  },
+  {
+    question: "Jika huruf 'ba' ditulis dengan 1 titik di bawah, berapa titik untuk huruf 'ta' dalam khat?",
+    choices: ["1 titik di atas", "2 titik di atas", "3 titik di bawah", "Tiada titik"],
+    correct: 1
+  },
+  {
+    question: "Contoh peralatan yang bukan digunakan dalam kaligrafi Islam...",
+    choices: ["Qalam", "Penggaris", "Pisau pemotong", "Sudip"],
+    correct: 3
+  },
+  {
+    question: "Jenis dakwat yang digunakan mestilah...",
+    choices: ["Cepat kering dan tebal", "Berwarna dan cair", "Tebal dan cepat habis", "Terlarut dalam air"],
+    correct: 0
+  },
+  {
+    question: "Huruf 'ج' dalam khat naskhi biasanya bermula dengan...",
+    choices: ["Satu titik di atas", "Lengkungan ke atas", "Lengkungan dan titik di bawah", "Tiada titik"],
+    correct: 2
+  },
+  {
+    question: "Qalam yang tidak tajam akan menyebabkan tulisan...",
+    choices: ["Bersih", "Berdebu", "Tebal dan kabur", "Halus"],
+    correct: 2
+  },
+  {
+    question: "Titik-titik dalam khat bukan hanya hiasan tetapi...",
+    choices: ["Untuk mewarna", "Untuk kiraan huruf", "Untuk keseimbangan tulisan", "Untuk pembaris"],
+    correct: 2
+  }
+];
+
+
+
+
+  let quiz = [];
+  let current = 0;
+  let score = 0;
+
+  function shuffle(array) {
+    let copy = [...array];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+
+  function loadQuestion() {
+    if (current >= quiz.length) {
+      const total = quiz.length * 5;
+      let msg = score === total ? "🌟 Hebat! Semua betul!" : score >= 90 ? "👍 Bagus! Cuba capai 100 markah!" : "📘 Cuba lagi untuk lebih baik!";
+      let html = `<div id="result">Markah akhir: ${score}/${total}<br>${msg}</div>`;
+      if (score < 90) {
+        html += `<br><button onclick="restartQuiz()">Cuba Lagi</button>`;
+      }
+      document.getElementById("quiz").innerHTML = html;
+      document.getElementById("feedback").innerText = "";
+      return;
+    }
+
+    const q = quiz[current];
+    let html = `
+      <div class="question-box">
+        <div class="question-count">Soalan ${current + 1} / ${quiz.length}</div>
+        <h3>${q.question}</h3>
+    `;
+    q.choices.forEach((c, i) => {
+      html += `<button onclick="checkAnswer(${i})">${c}</button>`;
+    });
+    html += `</div>`;
+    document.getElementById("quiz").innerHTML = html;
+    document.getElementById("feedback").innerText = "";
+  }
+
+  function checkAnswer(selected) {
+    const q = quiz[current];
+    if (selected === q.correct) {
+      score += 5;
+      document.getElementById("feedback").innerText = "✅ Betul!";
+    } else {
+      document.getElementById("feedback").innerText = `❌ Salah. Jawapan yang betul: ${q.choices[q.correct]}`;
+    }
+    current++;
+    setTimeout(loadQuestion, 1200);
+  }
+
+  function restartQuiz() {
+    quiz = shuffle(originalQuiz).slice(0, 20);
+    current = 0;
+    score = 0;
+    loadQuestion();
+  }
+
+  // Mula kuiz
+  restartQuiz();
+</script>
+
+</body>
+</html>
