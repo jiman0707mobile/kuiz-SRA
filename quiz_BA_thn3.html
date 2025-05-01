@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <title>Kuiz Bahasa Arab</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fff9db;
+      padding: 20px;
+      text-align: center;
+    }
+    .question-box {
+      background: #ffffff;
+      border: 2px solid #fcd34d;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px auto;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #b45309;
+    }
+    .question-count {
+      font-weight: bold;
+      color: #b91c1c;
+      margin-bottom: 10px;
+    }
+    button {
+      background-color: #fbbf24;
+      color: black;
+      border: none;
+      padding: 10px 20px;
+      margin: 8px;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 80%;
+      max-width: 400px;
+    }
+    button:hover {
+      background-color: #f59e0b;
+    }
+    #result {
+      font-size: 22px;
+      font-weight: bold;
+      margin-top: 20px;
+      color: #15803d;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🌟 Kuiz Bahasa Arab Tahun 3 </h1>
+<div id="quiz"></div>
+<div id="result"></div>
+<div id="feedback"></div>
+
+<script>
+const originalQuiz = [
+  {
+    question: "Apakah nombor 100 dalam Bahasa Arab?",
+    choices: ["مِائَة", "مِائَتَانِ", "مِئَةٌ", "مِائَةٌ وَ وَاحِدٌ"],
+    correct: 0
+  },
+  {
+    question: "Apa maksud 'ثَلاَثُمِائَةٍ'?",
+    choices: ["300", "30", "130", "13"],
+    correct: 0
+  },
+  {
+    question: "Apakah nombor 250 dalam Bahasa Arab?",
+    choices: ["مِائَتَانِ وَ خَمْسُونَ", "مِائَةٌ وَ خَمْسُونَ", "مِائَتَانِ وَ خَمْسَةٌ", "مِائَةٌ وَ عِشْرُونَ"],
+    correct: 0
+  },
+  {
+    question: "Berapa nombor 'مِائَتَانِ'?",
+    choices: ["100", "300", "200", "250"],
+    correct: 2
+  },
+  {
+    question: "Apa maksud 'مِائَةٌ وَ عِشْرُونَ'?",
+    choices: ["110", "120", "130", "210"],
+    correct: 1
+  },
+  {
+    question: "Apakah perkataan Arab bagi 'meja'?",
+    choices: ["طَاوِلَةٌ", "كُرْسِيٌّ", "سَرِيرٌ", "نَافِذَةٌ"],
+    correct: 0
+  },
+  {
+    question: "Apa maksud 'كُرْسِيٌّ'?",
+    choices: ["Meja", "Kerusi", "Katil", "Tingkap"],
+    correct: 1
+  },
+  {
+    question: "Apakah maksud 'مِرْوَحَةٌ'?",
+    choices: ["Kipas", "Televisyen", "Peti sejuk", "Lampu"],
+    correct: 0
+  },
+  {
+    question: "Apa maksud 'ثَلاَجَةٌ'?",
+    choices: ["Lampu", "Kipas", "Peti sejuk", "Telefon"],
+    correct: 2
+  },
+  {
+    question: "Perkataan Arab bagi 'lampu' ialah...",
+    choices: ["مِصْبَاحٌ", "مِكْنَسَةٌ", "مِرْوَحَةٌ", "كُرْسِيٌّ"],
+    correct: 0
+  },
+
+  {
+    question: "Apa maksud 'مِائَةٌ وَ تِسْعَةٌ وَ تِسْعُونَ'?",
+    choices: ["199", "109", "190", "100"],
+    correct: 0
+  },
+  {
+    question: "Bagaimana menulis 280 dalam Bahasa Arab?",
+    choices: ["مِائَتَانِ وَ ثَمَانُونَ", "ثَلاَثُمِائَةٍ", "مِائَةٌ وَ ثَمَانُونَ", "ثَمَانُونَ"],
+    correct: 0
+  },
+  {
+    question: "Apakah nombor ini: 'مِائَةٌ وَ سَبْعَةٌ وَ سَبْعُونَ'?",
+    choices: ["177", "117", "107", "170"],
+    correct: 0
+  },
+  {
+    question: "Apa maksud 'غَسَّالَةٌ'?",
+    choices: ["Mesin basuh", "Penghawa dingin", "Lampu", "Kipas"],
+    correct: 0
+  },
+  {
+    question: "Apakah kegunaan 'مِكْنَسَةٌ' di rumah?",
+    choices: ["Menyapu lantai", "Memasak", "Basuh pinggan", "Menggosok pakaian"],
+    correct: 0
+  },
+
+  {
+    question: "Apa maksud 'تِلْفَازٌ'?",
+    choices: ["Televisyen", "Telefon", "Peti sejuk", "Kipas"],
+    correct: 0
+  },
+  {
+    question: "Apakah perkataan Arab untuk 'telefon bimbit'?",
+    choices: ["هَاتِفٌ", "هَاتِفٌ نَقَّالٌ", "حَاسُوبٌ", "مِصْبَاحٌ"],
+    correct: 1
+  },
+  {
+    question: "Apa maksud 'سَرِيرٌ'?",
+    choices: ["Meja", "Katil", "Almari", "Tingkap"],
+    correct: 1
+  },
+  {
+    question: "Apakah maksud 'نَافِذَةٌ'?",
+    choices: ["Pintu", "Dinding", "Tingkap", "Meja"],
+    correct: 2
+  },
+  {
+    question: "Perkataan Arab bagi 'komputer' ialah...",
+    choices: ["هَاتِفٌ", "حَاسُوبٌ", "مِكْنَسَةٌ", "ثَلاَجَةٌ"],
+    correct: 1
+  }
+];
+
+
+  let quiz = [];
+  let current = 0;
+  let score = 0;
+
+  function shuffle(array) {
+    let copy = [...array];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+
+  function loadQuestion() {
+    if (current >= quiz.length) {
+      const total = quiz.length * 5;
+      let msg = score === total ? "🌟 Hebat! Semua betul!" : score >= 90 ? "👍 Bagus! Cuba capai 100 markah!" : "📘 Cuba lagi untuk lebih baik!";
+      let html = `<div id="result">Markah akhir: ${score}/${total}<br>${msg}</div>`;
+      if (score < 90) {
+        html += `<br><button onclick="restartQuiz()">Cuba Lagi</button>`;
+      }
+      document.getElementById("quiz").innerHTML = html;
+      document.getElementById("feedback").innerText = "";
+      return;
+    }
+
+    const q = quiz[current];
+    let html = `
+      <div class="question-box">
+        <div class="question-count">Soalan ${current + 1} / ${quiz.length}</div>
+        <h3>${q.question}</h3>
+    `;
+    q.choices.forEach((c, i) => {
+      html += `<button onclick="checkAnswer(${i})">${c}</button>`;
+    });
+    html += `</div>`;
+    document.getElementById("quiz").innerHTML = html;
+    document.getElementById("feedback").innerText = "";
+  }
+
+  function checkAnswer(selected) {
+    const q = quiz[current];
+    if (selected === q.correct) {
+      score += 5;
+      document.getElementById("feedback").innerText = "✅ Betul!";
+    } else {
+      document.getElementById("feedback").innerText = `❌ Salah. Jawapan yang betul: ${q.choices[q.correct]}`;
+    }
+    current++;
+    setTimeout(loadQuestion, 1200);
+  }
+
+  function restartQuiz() {
+    quiz = shuffle(originalQuiz).slice(0, 20);
+    current = 0;
+    score = 0;
+    loadQuestion();
+  }
+
+  // Mula kuiz
+  restartQuiz();
+</script>
+
+</body>
+</html>
