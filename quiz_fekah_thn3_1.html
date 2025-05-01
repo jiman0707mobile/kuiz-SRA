@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <title>Kuiz Feqah Tahun 3</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fef9c3;
+      padding: 20px;
+      text-align: center;
+    }
+    .question-box {
+      background: #fffbe6;
+      border: 2px solid #facc15;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px auto;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #ca8a04;
+    }
+    .question-count {
+      font-weight: bold;
+      color: #b91c1c;
+      margin-bottom: 10px;
+    }
+    button {
+      background-color: #38bdf8;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 8px;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 80%;
+      max-width: 400px;
+    }
+    button:hover {
+      background-color: #0ea5e9;
+    }
+    #result {
+      font-size: 22px;
+      font-weight: bold;
+      margin-top: 20px;
+      color: #10b981;
+    }
+    #feedback {
+      margin-top: 10px;
+      color: #d97706;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🌟 Kuiz Feqah: Tahun 3 </h1>
+<div id="quiz"></div>
+<div id="result"></div>
+
+<script>
+const originalQuiz = [
+  {
+    question: "Apakah maksud tayamum?",
+    choices: ["Bersuci dengan pasir", "Berwuduk dalam hujan", "Mandi wajib", "Membasuh muka dengan sabun"],
+    correct: 0
+  },
+  {
+    question: "Bilakah kita dibenarkan bertayamum?",
+    choices: ["Air terlalu sejuk", "Tidak ada air", "Banyak kerja rumah", "Selesai makan"],
+    correct: 1
+  },
+  {
+    question: "Berapakah rukun tayamum?",
+    choices: ["5", "3", "2", "4"],
+    correct: 1
+  },
+  {
+    question: "Antara berikut, yang manakah bukan sebab tayamum dibolehkan?",
+    choices: ["Sakit yang tidak boleh kena air", "Tidak suka air", "Ketiadaan air", "Perjalanan jauh dan tiada air"],
+    correct: 1
+  },
+  {
+    question: "Niat tayamum dibaca ketika...",
+    choices: ["Sesudah sapu muka", "Sebelum sapu tangan", "Ketika menyapu muka", "Sebelum sapu debu"],
+    correct: 2
+  },
+  {
+    question: "Apakah bahan yang digunakan dalam tayamum?",
+    choices: ["Air wangi", "Debu bersih", "Lumpur", "Air sabun"],
+    correct: 1
+  },
+  {
+    question: "Tayamum menggantikan...",
+    choices: ["Solat", "Wuduk dan mandi wajib", "Puasa", "Mengaji"],
+    correct: 1
+  },
+  {
+    question: "Apakah anggota yang disapu dalam tayamum?",
+    choices: ["Muka dan tangan", "Tangan dan kaki", "Muka dan kaki", "Tangan dan kepala"],
+    correct: 0
+  },
+  {
+    question: "Jika air dijumpai selepas tayamum tetapi sebelum solat, apakah perlu dibuat?",
+    choices: ["Terus solat", "Ganti tayamum dengan wuduk", "Baca doa", "Tidur dahulu"],
+    correct: 1
+  },
+  {
+    question: "Debu tayamum mestilah...",
+    choices: ["Basah", "Bersih dan suci", "Berwarna putih", "Berpasir kasar"],
+    correct: 1
+  },
+  {
+    question: "Jika seseorang bertayamum dan mendapati air selepas solat, adakah solatnya sah?",
+    choices: ["Tidak sah, perlu qadha", "Sah, kerana telah bertayamum", "Tidak perlu solat semula", "Kena mandi wajib semula"],
+    correct: 1
+  },
+  {
+    question: "Tayamum tidak sah jika digunakan bahan selain daripada debu, contohnya...",
+    choices: ["Serbuk simen", "Pasir halus", "Tanah liat", "Debu di dinding"],
+    correct: 0
+  },
+  {
+    question: "Apa hukum tayamum jika air ada tetapi malas guna?",
+    choices: ["Harus", "Sah", "Tidak sah", "Makruh"],
+    correct: 2
+  },
+  {
+    question: "Dalam keadaan hujan dan banjir, tayamum dibolehkan jika...",
+    choices: ["Air banjir tidak bersih", "Takut keluar rumah", "Tidak suka sejuk", "Mahu cepat solat"],
+    correct: 0
+  },
+  {
+    question: "Jika terkena najis selepas tayamum, apakah yang perlu dibuat?",
+    choices: ["Solat terus", "Basuh najis dan ulang tayamum", "Ambil wuduk", "Tukar pakaian sahaja"],
+    correct: 1
+  },
+  {
+    question: "Hukum tayamum adalah...",
+    choices: ["Wajib", "Sunat", "Harus", "Makruh"],
+    correct: 2
+  },
+  {
+    question: "Antara berikut, yang manakah sah tayamum?",
+    choices: ["Debu najis", "Debu bersih", "Abu rokok", "Debu kasut"],
+    correct: 1
+  },
+  {
+    question: "Perbuatan menyapu muka dalam tayamum dilakukan selepas...",
+    choices: ["Menyebut niat", "Sapu tangan", "Membaca doa", "Menyapu kaki"],
+    correct: 0
+  },
+  {
+    question: "Apakah maksud 'rukun' dalam tayamum?",
+    choices: ["Perkara sunat", "Perkara yang wajib dibuat", "Perkara tambahan", "Perkara makruh"],
+    correct: 1
+  },
+  {
+    question: "Tayamum tidak boleh dilakukan jika...",
+    choices: ["Air terlalu sedikit", "Air ada dan boleh digunakan", "Sakit ringan", "Tiada debu"],
+    correct: 1
+  }
+];
+
+
+let quiz = [];
+let current = 0;
+let score = 0;
+let totalTime = 40 * 60; // 40 minit
+let timer;
+
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function startQuiz() {
+  quiz = shuffle([...originalQuiz]);
+  current = 0;
+  score = 0;
+  totalTime = 40 * 60;
+  clearInterval(timer);
+  startTimer();
+  loadQuestion();
+}
+
+function startTimer() {
+  updateTimerDisplay();
+  timer = setInterval(() => {
+    totalTime--;
+    updateTimerDisplay();
+    if (totalTime <= 0) {
+      clearInterval(timer);
+      showFinalResult();
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const minutes = Math.floor(totalTime / 60);
+  const seconds = totalTime % 60;
+  const display = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  const counter = document.querySelector(".question-count span#timerDisplay");
+  if (counter) counter.textContent = display;
+}
+
+function loadQuestion() {
+  if (current >= quiz.length) {
+    clearInterval(timer);
+    showFinalResult();
+    return;
+  }
+
+  const q = quiz[current];
+  let html = `
+    <div class="question-box">
+      <div class="question-count">Soalan ${current + 1} / ${quiz.length} | Masa: <span id="timerDisplay"></span></div>
+      <h3>${q.question}</h3>
+  `;
+
+  const shuffledChoices = shuffle([...q.choices]);
+  shuffledChoices.forEach((c) => {
+    html += `<button onclick="checkAnswer('${c}', '${q.choices[q.correct]}')">${c}</button>`;
+  });
+
+  html += `<div id="feedback"></div></div>`;
+  document.getElementById("quiz").innerHTML = html;
+  updateTimerDisplay();
+}
+
+function checkAnswer(selected, correctAnswer) {
+  const feedback = document.getElementById("feedback");
+  if (selected === correctAnswer) {
+    feedback.innerHTML = "✅ Betul! +5 markah";
+    score += 5;
+  } else {
+    feedback.innerHTML = `❌ Salah. Jawapan betul: <strong>${correctAnswer}</strong>`;
+  }
+  setTimeout(() => {
+    current++;
+    loadQuestion();
+  }, 1000);
+}
+
+function showFinalResult() {
+  const total = quiz.length * 5;
+  let msg = score === total ? "🌟 Hebat! Semua betul!" : score >= 80 ? "👍 Bagus! Cuba penuh markah!" : "📘 Teruskan berusaha!";
+  let html = `Markah akhir: ${score}/${total}<br>${msg}`;
+  if (score < 80) html += `<br><button onclick="startQuiz()">Cuba Semula</button>`;
+  document.getElementById("quiz").innerHTML = '';
+  document.getElementById("result").innerHTML = html;
+}
+
+startQuiz();
+</script>
+
+</body>
+</html>
