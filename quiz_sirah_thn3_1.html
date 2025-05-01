@@ -238,8 +238,8 @@ function loadQuestion() {
 function checkAnswer(selected, correctAnswer) {
   const feedback = document.getElementById("feedback");
   if (selected === correctAnswer) {
-    feedback.innerHTML = "✅ Betul! +4 markah";
-    score += 4;
+    feedback.innerHTML = "✅ Betul! +5 markah";
+    score += 5;
   } else {
     feedback.innerHTML = `❌ Salah. Jawapan betul: <strong>${correctAnswer}</strong>`;
   }
@@ -250,7 +250,7 @@ function checkAnswer(selected, correctAnswer) {
 }
 
 function showFinalResult() {
-  const total = quiz.length * 4;
+  const total = quiz.length * 5;
   let msg = score === total ? "🌟 Hebat! Semua betul!" : score >= 80 ? "👍 Bagus! Cuba penuh markah!" : "📘 Teruskan berusaha!";
   let html = `Markah akhir: ${score}/${total}<br>${msg}`;
   if (score < 80) html += `<br><button onclick="startQuiz()">Cuba Semula</button>`;
