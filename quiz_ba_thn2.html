@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <title>Kuiz Bahasa Arab: Nombor & Warna</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fff9c4;
+      padding: 20px;
+      text-align: center;
+    }
+    .question-box {
+      background: #ffffff;
+      border: 2px solid #fbc02d;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px auto;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #f57f17;
+    }
+    .question-count {
+      font-weight: bold;
+      color: #d32f2f;
+      margin-bottom: 10px;
+    }
+    button {
+      background-color: #4fc3f7;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 8px;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 80%;
+      max-width: 400px;
+    }
+    button:hover {
+      background-color: #0288d1;
+    }
+    #result {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 20px;
+      color: #388e3c;
+    }
+    #feedback {
+      font-size: 18px;
+      color: #e53935;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🌟 Kuiz Bahasa Arab Tahun 2: Nombor & Warna</h1>
+<div id="quiz"></div>
+<div id="result"></div>
+<div id="feedback"></div>
+
+<script>
+  const originalQuiz = [
+    { question: "Apakah maksud 'وَاحِدٌ'?", choices: ["Sepuluh", "Tiga", "Lima", "Satu"], correct: 3 },
+    { question: "Apakah maksud 'اِثْنَانِ'?", choices: ["Dua", "Empat", "Enam", "Lapan"], correct: 0 },
+    { question: "Apakah maksud 'ثَلاَثَةٌ'?", choices: ["Sembilan", "Tujuh", "Tiga", "Dua"], correct: 2 },
+    { question: "Apakah maksud 'أَرْبَعَةٌ'?", choices: ["Empat", "Lima", "Enam", "Tiga"], correct: 0 },
+    { question: "Apakah maksud 'خَمْسَةٌ'?", choices: ["Satu", "Lima", "Dua", "Tujuh"], correct: 1 },
+    { question: "Apakah maksud 'سِتَّةٌ'?", choices: ["Empat", "Lapan", "Sepuluh", "Enam"], correct: 3 },
+    { question: "Apakah maksud 'سَبْعَةٌ'?", choices: ["Tujuh", "Tiga", "Enam", "Sembilan"], correct: 0 },
+    { question: "Apakah maksud 'ثَمَانِيَةٌ'?", choices: ["Lima", "Dua", "Lapan", "Tujuh"], correct: 2 },
+    { question: "Apakah maksud 'تِسْعَةٌ'?", choices: ["Tiga", "Sembilan", "Sepuluh", "Satu"], correct: 1 },
+    { question: "Apakah maksud 'عَشَرَةٌ'?", choices: ["Sepuluh", "Lapan", "Sembilan", "Tiga"], correct: 0 },
+    { question: "Apakah maksud 'أَحْمَرُ'?", choices: ["Merah", "Kuning", "Biru", "Hijau"], correct: 0 },
+    { question: "Apakah maksud 'أَصْفَرُ'?", choices: ["Hitam", "Merah", "Hijau", "Kuning"], correct: 3 },
+    { question: "Apakah maksud 'أَزْرَقُ'?", choices: ["Coklat", "Putih", "Biru", "Kuning"], correct: 2 },
+    { question: "Apakah maksud 'أَخْضَرُ'?", choices: ["Merah", "Hitam", "Hijau", "Biru"], correct: 2 },
+    { question: "Apakah maksud 'أَبْيَضُ'?", choices: ["Merah", "Putih", "Coklat", "Biru"], correct: 1 },
+    { question: "Apakah maksud 'أَسْوَدُ'?", choices: ["Hijau", "Hitam", "Merah", "Kuning"], correct: 1 },
+    { question: "Apakah warna 'أَزْرَقُ'?", choices: ["Hijau", "Putih", "Merah", "Biru"], correct: 3 },
+    { question: "Nombor 'خَمْسَةٌ' ialah?", choices: ["5", "6", "3", "4"], correct: 0 },
+    { question: "Warna 'أَخْضَرُ' ialah?", choices: ["Merah", "Kuning", "Coklat", "Hijau"], correct: 3 },
+    { question: "Nombor 'ثَلاَثَةٌ' ialah?", choices: ["3", "5", "1", "4"], correct: 0 }
+  ];
+
+  let quiz = [];
+  let current = 0;
+  let score = 0;
+
+  function shuffle(array) {
+    let copy = [...array];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+
+  function loadQuestion() {
+    if (current >= quiz.length) {
+      const total = quiz.length * 5;
+      let msg = score === total ? "🌟 Hebat! Semua betul!" : score >= 90 ? "👍 Bagus! Cuba capai 100 markah!" : "📘 Cuba lagi untuk lebih baik!";
+      let html = `<div id="result">Markah akhir: ${score}/${total}<br>${msg}</div>`;
+      if (score < 90) {
+        html += `<br><button onclick="restartQuiz()">Cuba Lagi</button>`;
+      }
+      document.getElementById("quiz").innerHTML = html;
+      document.getElementById("feedback").innerText = "";
+      return;
+    }
+
+    const q = quiz[current];
+    let html = `
+      <div class="question-box">
+        <div class="question-count">Soalan ${current + 1} / ${quiz.length}</div>
+        <h3>${q.question}</h3>
+    `;
+    q.choices.forEach((c, i) => {
+      html += `<button onclick="checkAnswer(${i})">${c}</button>`;
+    });
+    html += `</div>`;
+    document.getElementById("quiz").innerHTML = html;
+    document.getElementById("feedback").innerText = "";
+  }
+
+  function checkAnswer(selected) {
+    const q = quiz[current];
+    if (selected === q.correct) {
+      score += 5;
+      document.getElementById("feedback").innerText = "✅ Betul!";
+    } else {
+      document.getElementById("feedback").innerText = `❌ Salah. Jawapan yang betul: ${q.choices[q.correct]}`;
+    }
+    current++;
+    setTimeout(loadQuestion, 1200);
+  }
+
+  function restartQuiz() {
+    quiz = shuffle(originalQuiz).slice(0, 20);
+    current = 0;
+    score = 0;
+    loadQuestion();
+  }
+
+  // Mula kuiz
+  restartQuiz();
+</script>
+
+</body>
+</html>
