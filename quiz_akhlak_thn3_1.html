@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <title>Kuiz Akhlak</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fff9db;
+      padding: 20px;
+      text-align: center;
+    }
+    .question-box {
+      background: #ffffff;
+      border: 2px solid #fcd34d;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px auto;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #b45309;
+    }
+    .question-count {
+      font-weight: bold;
+      color: #b91c1c;
+      margin-bottom: 10px;
+    }
+    button {
+      background-color: #fbbf24;
+      color: black;
+      border: none;
+      padding: 10px 20px;
+      margin: 8px;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 80%;
+      max-width: 400px;
+    }
+    button:hover {
+      background-color: #f59e0b;
+    }
+    #result {
+      font-size: 22px;
+      font-weight: bold;
+      margin-top: 20px;
+      color: #15803d;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🌟 Kuiz Akhlak : Tahun 3</h1>
+<div id="quiz"></div>
+<div id="result"></div>
+<div id="feedback"></div>
+
+<script>
+  const originalQuiz = [
+   {
+    question: "Apa tujuan utama kita menziarahi orang sakit?",
+    choices: ["Melawat rumah baru", "Memberi semangat dan mendoakan kesembuhan", "Membawa makanan", "Bergambar dengan pesakit"],
+    correct: 1
+  },
+  {
+    question: "Apakah ucapan yang sesuai kepada orang sakit?",
+    choices: ["Kenapa kamu sakit?", "Saya sihat", "Semoga cepat sembuh", "Awak nampak pucat"],
+    correct: 2
+  },
+  {
+    question: "Apakah adab ketika berada di rumah orang sakit?",
+    choices: ["Berbual kuat", "Datang waktu malam", "Bercakap sopan dan tidak lama", "Main telefon"],
+    correct: 2
+  },
+  {
+    question: "Menziarahi orang sakit adalah amalan yang dianjurkan oleh ______.",
+    choices: ["Guru", "Rakan", "Kawan baik", "Islam"],
+    correct: 3
+  },
+  {
+    question: "Perbuatan menghiburkan orang sakit boleh membuat mereka rasa ______.",
+    choices: ["Sedih", "Lebih sakit", "Gembira dan kuat semangat", "Marah"],
+    correct: 2
+  },
+  {
+    question: "Adab berpakaian ketika menziarahi orang sakit ialah ______.",
+    choices: ["Baju tidur", "Pakaian tidak sopan", "Pakaian sukan", "Pakaian kemas dan bersih"],
+    correct: 3
+  },
+  {
+    question: "Perkara yang TIDAK harus dilakukan semasa ziarah ialah ______.",
+    choices: ["Mendoakan kesembuhan", "Berzikir", "Bergelak ketawa", "Beri kata semangat"],
+    correct: 2
+  },
+  {
+    question: "Kita harus menjaga ______ ketika menziarahi pesakit.",
+    choices: ["Kasut kita", "Adab dan suara", "Waktu tidur", "Telefon"],
+    correct: 1
+  },
+  {
+    question: "Orang yang menziarahi orang sakit akan mendapat ______.",
+    choices: ["Gaji", "Pahala dan rahmat Allah", "Hadiah", "Ubat"],
+    correct: 1
+  },
+  {
+    question: "Contoh amalan sunat ketika ziarah orang sakit ialah ______.",
+    choices: ["Bawa hadiah mahal", "Tanya soalan peribadi", "Beri salam dan doa", "Tidur di rumah pesakit"],
+    correct: 2
+  },
+
+  {
+    question: "Apakah yang perlu dilakukan sebelum menziarahi rakan?",
+    choices: ["Terus datang saja", "Minta izin terlebih dahulu", "Ajak semua jiran", "Bawa makanan banyak"],
+    correct: 1
+  },
+  {
+    question: "Pakaian semasa menziarahi rakan mestilah ______.",
+    choices: ["Pakaian sukan", "Pakaian tidur", "Pakaian sopan dan kemas", "Seluar pendek"],
+    correct: 2
+  },
+  {
+    question: "Apa ucapan yang sesuai apabila bertemu rakan di rumahnya?",
+    choices: ["Eh, rumah kecil ya?", "Assalamualaikum", "Mana ibu awak?", "Dah makan?"],
+    correct: 1
+  },
+  {
+    question: "Tingkah laku yang baik semasa ziarah rakan ialah ______.",
+    choices: ["Melihat sekeliling rumah", "Berbual sopan dan hormat", "Masuk ke dapur sendiri", "Buka almari"],
+    correct: 1
+  },
+  {
+    question: "Menziarahi rakan dapat mengeratkan ______.",
+    choices: ["Pergaduhan", "Silaturrahim", "Permusuhan", "Kesedihan"],
+    correct: 1
+  },
+  {
+    question: "Kita tidak boleh masuk ke rumah rakan tanpa ______.",
+    choices: ["Salam", "Izin dan salam", "Bunyi loceng", "Jerit nama"],
+    correct: 1
+  },
+  {
+    question: "Adab ketika dijamu makanan ialah ______.",
+    choices: ["Ambil semua", "Makan tamak", "Ucap terima kasih", "Tanya harga"],
+    correct: 2
+  },
+  {
+    question: "Jika rakan tidak sihat, kita boleh ______.",
+    choices: ["Bermain dengannya", "Berdoa dan pulang awal", "Bercakap kuat", "Ambil barangnya"],
+    correct: 1
+  },
+  {
+    question: "Apabila hendak pulang dari rumah rakan, kita perlu ______.",
+    choices: ["Terus keluar diam-diam", "Minta izin dan ucap terima kasih", "Ambil makanan", "Tinggalkan sampah"],
+    correct: 1
+  },
+  {
+    question: "Salah satu adab selepas ziarah ialah ______.",
+    choices: ["Cerita semua tentang rumah rakan", "Mengumpat", "Jaga rahsia dan adab", "Buat video"],
+    correct: 2
+  },
+
+  {
+    question: "Bercakap benar bermaksud berkata perkara yang ______.",
+    choices: ["Lucu", "Betul", "Tidak penting", "Berlebihan"],
+    correct: 1
+  },
+  {
+    question: "Islam menyuruh umatnya sentiasa ______.",
+    choices: ["Bercakap benar", "Bercakap banyak", "Diam saja", "Berbohong"],
+    correct: 0
+  },
+  {
+    question: "Salah satu sifat Rasulullah SAW ialah ______.",
+    choices: ["Pemarah", "Berbohong", "Bercakap benar", "Pendiam"],
+    correct: 2
+  },
+  {
+    question: "Orang yang bercakap benar akan ______.",
+    choices: ["Dibenci", "Dihukum", "Diperlekeh", "Dihormati"],
+    correct: 3
+  },
+  {
+    question: "Contoh bercakap benar di sekolah ialah ______.",
+    choices: ["Buat alasan palsu", "Mengaku kesalahan", "Salahkan orang lain", "Diam saja"],
+    correct: 1
+  }
+   ];
+
+  let quiz = [];
+  let current = 0;
+  let score = 0;
+
+  function shuffle(array) {
+    let copy = [...array];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+
+  function loadQuestion() {
+    if (current >= quiz.length) {
+      const total = quiz.length * 5;
+      let msg = score === total ? "🌟 Hebat! Semua betul!" : score >= 90 ? "👍 Bagus! Cuba capai 100 markah!" : "📘 Cuba lagi untuk lebih baik!";
+      let html = `<div id="result">Markah akhir: ${score}/${total}<br>${msg}</div>`;
+      if (score < 90) {
+        html += `<br><button onclick="restartQuiz()">Cuba Lagi</button>`;
+      }
+      document.getElementById("quiz").innerHTML = html;
+      document.getElementById("feedback").innerText = "";
+      return;
+    }
+
+    const q = quiz[current];
+    let html = `
+      <div class="question-box">
+        <div class="question-count">Soalan ${current + 1} / ${quiz.length}</div>
+        <h3>${q.question}</h3>
+    `;
+    q.choices.forEach((c, i) => {
+      html += `<button onclick="checkAnswer(${i})">${c}</button>`;
+    });
+    html += `</div>`;
+    document.getElementById("quiz").innerHTML = html;
+    document.getElementById("feedback").innerText = "";
+  }
+
+  function checkAnswer(selected) {
+    const q = quiz[current];
+    if (selected === q.correct) {
+      score += 5;
+      document.getElementById("feedback").innerText = "✅ Betul!";
+    } else {
+      document.getElementById("feedback").innerText = `❌ Salah. Jawapan yang betul: ${q.choices[q.correct]}`;
+    }
+    current++;
+    setTimeout(loadQuestion, 1200);
+  }
+
+  function restartQuiz() {
+    quiz = shuffle(originalQuiz).slice(0, 20);
+    current = 0;
+    score = 0;
+    loadQuestion();
+  }
+
+  // Mula kuiz
+  restartQuiz();
+</script>
+
+</body>
+</html>

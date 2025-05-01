@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <title>Kuiz Tauhid </title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #cceeff;
+      padding: 20px;
+      text-align: center;
+    }
+    .question-box {
+      background: #ffffff;
+      border: 2px solid #60a5fa;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px auto;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #2563eb;
+    }
+    .question-count {
+      font-weight: bold;
+      color: #1d4ed8;
+      margin-bottom: 10px;
+    }
+    button {
+      background-color: #3b82f6;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 8px;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 80%;
+      max-width: 400px;
+    }
+    button:hover {
+      background-color: #2563eb;
+    }
+    #result {
+      font-size: 22px;
+      font-weight: bold;
+      margin-top: 20px;
+      color: #059669;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🕌 Kuiz Tauhid Tahun 3</h1>
+<div id="quiz"></div>
+<div id="result"></div>
+<div id="feedback"></div>
+
+<script>
+  const originalQuiz = [
+    {"question": "Apakah maksud beriman kepada rasul?", "choices": ["Mempercayai semua rasul utusan Allah", "Percaya malaikat", "Percaya semua orang", "Percaya hanya Nabi Muhammad"], "correct": 0},
+    {"question": "Berapa jumlah rasul yang wajib diketahui?", "choices": ["10", "25", "20", "5"], "correct": 1},
+    {"question": "Siapakah rasul terakhir?", "choices": ["Nabi Isa", "Nabi Musa", "Nabi Muhammad SAW", "Nabi Sulaiman"], "correct": 2},
+    {"question": "Rasul menerima wahyu melalui...", "choices": ["Buku", "Malaikat Jibril", "Mimpi", "Kawan"], "correct": 1},
+    {"question": "Mengapa kita perlu beriman kepada rasul?", "choices": ["Kerana mereka guru kita", "Kerana mereka kaya", "Kerana mereka utusan Allah", "Kerana mereka hebat"], "correct": 2},
+    {"question": "Siapakah rasul yang menerima kitab Zabur?", "choices": ["Nabi Ibrahim", "Nabi Musa", "Nabi Daud", "Nabi Isa"], "correct": 2},
+    {"question": "Kitab Taurat diturunkan kepada...", "choices": ["Nabi Muhammad", "Nabi Musa", "Nabi Isa", "Nabi Nuh"], "correct": 1},
+    {"question": "Al-Quran diturunkan kepada...", "choices": ["Nabi Musa", "Nabi Isa", "Nabi Ibrahim", "Nabi Muhammad SAW"], "correct": 3},
+    {"question": "Rasul diutus untuk menyampaikan...", "choices": ["Harta", "Wahyu Allah", "Berita palsu", "Perkara dunia"], "correct": 1},
+    {"question": "Rasul mempunyai sifat...", "choices": ["Makan banyak", "Amanah", "Tidur siang", "Bercakap kasar"], "correct": 1},
+    {"question": "Bagaimana cara kita taat kepada Rasulullah?", "choices": ["Dengan mengikut sunnah dan ajaran Baginda", "Dengan tidur banyak", "Dengan bermain", "Dengan marah orang lain"], "correct": 0},
+    {"question": "Taat kepada Rasulullah menunjukkan kita...", "choices": ["Orang yang malas", "Orang Islam yang baik", "Tidak beriman", "Banyak harta"], "correct": 1},
+    {"question": "Taat bermaksud...", "choices": ["Melawan perintah", "Mengikut arahan", "Membantah", "Melupakan"], "correct": 1},
+    {"question": "Contoh sunnah Rasulullah ialah...", "choices": ["Bercakap bohong", "Solat berjemaah", "Melawan guru", "Tidur sepanjang hari"], "correct": 1},
+    {"question": "Kita menunjukkan taat kepada Rasul dengan...", "choices": ["Melawan ibu bapa", "Mengikut sunnah", "Melupakan ajaran", "Berbuat jahat"], "correct": 1},
+    {"question": "Rasulullah mengajar kita untuk...", "choices": ["Bersikap kasar", "Bercakap bohong", "Berakhlak mulia", "Melupakan Al-Quran"], "correct": 2},
+    {"question": "Mengikut ajaran Rasul adalah tanda...", "choices": ["Taat dan cinta Rasul", "Malas", "Marah", "Tidak suka agama"], "correct": 0},
+    {"question": "Perbuatan mencintai Rasul ditunjukkan dengan...", "choices": ["Mengikut sunnah", "Melawan guru", "Melupakan solat", "Bercakap kasar"], "correct": 0},
+    {"question": "Hadis bermaksud...", "choices": ["Kata-kata sahabat", "Kata-kata ulama", "Kata-kata Nabi", "Ayat al-Quran"], "correct": 2},
+    {"question": "Kita membaca selawat ke atas Nabi ketika...", "choices": ["Makan", "Solat", "Main", "Tidur"], "correct": 1},
+
+  ];
+
+
+  let quiz = [];
+  let current = 0;
+  let score = 0;
+
+  function shuffle(array) {
+    let copy = [...array];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+
+  function loadQuestion() {
+    if (current >= quiz.length) {
+      const total = quiz.length * 5;
+      let msg = score === total ? "🌟 Hebat! Semua betul!" : score >= 90 ? "👍 Bagus! Cuba capai 100 markah!" : "📘 Cuba lagi untuk lebih baik!";
+      let html = `<div id="result">Markah akhir: ${score}/${total}<br>${msg}</div>`;
+      if (score < 90) {
+        html += `<br><button onclick="restartQuiz()">Cuba Lagi</button>`;
+      }
+      document.getElementById("quiz").innerHTML = html;
+      document.getElementById("feedback").innerText = "";
+      return;
+    }
+
+    const q = quiz[current];
+    let html = `
+      <div class="question-box">
+        <div class="question-count">Soalan ${current + 1} / ${quiz.length}</div>
+        <h3>${q.question}</h3>
+    `;
+    q.choices.forEach((c, i) => {
+      html += `<button onclick="checkAnswer(${i})">${c}</button>`;
+    });
+    html += `</div>`;
+    document.getElementById("quiz").innerHTML = html;
+    document.getElementById("feedback").innerText = "";
+  }
+
+  function checkAnswer(selected) {
+    const q = quiz[current];
+    if (selected === q.correct) {
+      score += 5;
+      document.getElementById("feedback").innerText = "✅ Betul!";
+    } else {
+      document.getElementById("feedback").innerText = `❌ Salah. Jawapan yang betul: ${q.choices[q.correct]}`;
+    }
+    current++;
+    setTimeout(loadQuestion, 1200);
+  }
+
+  function restartQuiz() {
+    quiz = shuffle(originalQuiz).slice(0, 20);
+    current = 0;
+    score = 0;
+    loadQuestion();
+  }
+
+  // Mula kuiz
+  restartQuiz();
+</script>
+  
+</body>
+</html>

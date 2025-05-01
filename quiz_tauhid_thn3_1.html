@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <title>Kuiz Tauhid (Tahun 3)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fff9db;
+      padding: 20px;
+      text-align: center;
+    }
+    .question-box {
+      background: #ffffff;
+      border: 2px solid #facc15;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px auto;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #ca8a04;
+    }
+    .question-count {
+      font-weight: bold;
+      color: #ef4444;
+      margin-bottom: 10px;
+    }
+    button {
+      background-color: #60a5fa;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 8px;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 80%;
+      max-width: 400px;
+    }
+    button:hover {
+      background-color: #3b82f6;
+    }
+    #result {
+      font-size: 22px;
+      font-weight: bold;
+      margin-top: 20px;
+      color: #10b981;
+    }
+    #restart {
+      display: none;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🧼 Kuiz Tauhid </h1>
+<div id="quiz"></div>
+<div id="result"></div>
+<button id="restart" onclick="restartQuiz()">Mula Semula</button>
+
+<script>
+  const originalQuiz = [
+  {
+    question: "Beriman kepada rasul ialah percaya bahawa mereka adalah ______.",
+    choices: ["Nabi palsu", "Utusan Allah", "Penulis kitab", "Ketua kampung"],
+    correct: 1
+  },
+  {
+    question: "Jumlah rasul yang wajib diketahui ialah ______ orang.",
+    choices: ["10", "20", "25", "15"],
+    correct: 2
+  },
+  {
+    question: "Rasul yang pertama ialah ______.",
+    choices: ["Nabi Isa", "Nabi Muhammad", "Nabi Musa", "Nabi Nuh"],
+    correct: 3
+  },
+  {
+    question: "Rasul terakhir ialah ______.",
+    choices: ["Nabi Isa", "Nabi Muhammad", "Nabi Musa", "Nabi Yusuf"],
+    correct: 1
+  },
+  {
+    question: "Semua rasul bersifat ______.",
+    choices: ["Sombong", "Bercakap bohong", "Amanah", "Pemarah"],
+    correct: 2
+  },
+  {
+    question: "Taat kepada Rasul bermaksud ______ segala ajarannya.",
+    choices: ["Menolak", "Memperlekehkan", "Mengikut dan mematuhi", "Menyesuaikan dengan zaman"],
+    correct: 2
+  },
+  {
+    question: "Rasulullah SAW mengajar kita supaya bersikap ______.",
+    choices: ["Kasar", "Jujur", "Mementingkan diri", "Marah"],
+    correct: 1
+  },
+  {
+    question: "Kita menunjukkan taat kepada Rasulullah SAW dengan cara ______.",
+    choices: ["Melakukan sunnah baginda", "Tidak solat", "Tidak membaca al-Quran", "Membuat bising di masjid"],
+    correct: 0
+  },
+  {
+    question: "Rasulullah SAW diutus untuk menjadi ______ bagi seluruh manusia.",
+    choices: ["Raja", "Pemimpin dunia", "Contoh teladan", "Ketua puak"],
+    correct: 2
+  },
+  {
+    question: "Apakah ganjaran bagi orang yang taat kepada Rasulullah SAW?",
+    choices: ["Masuk syurga", "Kaya harta", "Hidup selesa", "Diberi rumah besar"],
+    correct: 0
+  }
+  ];
+
+  let quiz = [];
+  let current = 0;
+  let score = 0;
+
+  function shuffle(array) {
+    let currentIndex = array.length, randomIndex;
+    while (currentIndex !== 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+      [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+    }
+    return array;
+  }
+
+  function startQuiz() {
+    quiz = shuffle([...originalQuiz]);
+    current = 0;
+    score = 0;
+    document.getElementById("result").innerHTML = '';
+    loadQuestion();
+  }
+
+  function loadQuestion() {
+    if (current >= quiz.length) {
+      const total = quiz.length * 5;
+      let msg = score === total ? "🌟 Hebat! Semua betul!" : score >= 90 ? "👍 Bagus! Cuba penuh markah!" : "📘 Teruskan berusaha!";
+      let restartBtn = score < 90 ? `<br><button onclick="startQuiz()">Buat Semula</button>` : '';
+      document.getElementById("quiz").innerHTML = '';
+      document.getElementById("result").innerHTML = `Markah akhir: ${score}/${total}<br>${msg}${restartBtn}`;
+      return;
+    }
+
+    const q = quiz[current];
+    let html = `
+      <div class="question-box">
+        <div class="question-count">Soalan ${current + 1} / ${quiz.length}</div>
+        <h3>${q.question}</h3>
+    `;
+    q.choices.forEach((c, i) => {
+      html += `<button onclick="checkAnswer(${i})">${c}</button>`;
+    });
+    html += `<div id="feedback"></div></div>`;
+    document.getElementById("quiz").innerHTML = html;
+  }
+
+  function checkAnswer(selected) {
+    const q = quiz[current];
+    const feedbackEl = document.getElementById("feedback");
+    const buttons = document.querySelectorAll("button");
+
+    buttons.forEach(btn => btn.disabled = true);
+
+    if (selected === q.correct) {
+      feedbackEl.innerHTML = `<div class="feedback-correct">✅ Betul! +5 markah</div>`;
+      score += 5;
+    } else {
+      feedbackEl.innerHTML = `
+        <div class="feedback-wrong">❌ Salah.</div>
+        <div class="feedback-correct">✔️ Jawapan betul: ${q.choices[q.correct]}</div>
+      `;
+    }
+
+    setTimeout(() => {
+      current++;
+      loadQuestion();
+    }, 2000);
+  }
+
+  startQuiz();
+  </script>
+  
+</body>
+</html>
