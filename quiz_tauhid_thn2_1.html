@@ -60,27 +60,27 @@
 <script>
 const quiz = [
   { question: "Apakah maksud Baqa'?", choices: ["Kekal selama-lamanya", "Ada permulaan", "Tidak kekal", "Berakhir"], correct: 0 },
-  { question: "Apakah lawan kepada Baqa'?", choices: ["Qidam", "Fana'", "Wujud", "Bashar"], correct: 1 },
-  { question: "Apakah maksud Qidam?", choices: ["Tidak bermula", "Baru", "Kekal", "Ada akhir"], correct: 0 },
-  { question: "Apakah lawan kepada Qidam?", choices: ["Baqa'", "Hudus", "Qiyamuhu Binafsih", "Sama'"], correct: 1 },
-  { question: "Apakah maksud Muhalafatuhu lil hawadith?", choices: ["Berbeza dengan makhluk", "Sama dengan manusia", "Makhluk yang hebat", "Sesuai dengan akal"], correct: 0 },
-  { question: "Apakah lawan kepada Muhalafatuhu lil hawadith?", choices: ["Hudus", "Fana'", "Mumathalatuhu lil hawadith", "Wujud"], correct: 2 },
-  { question: "Sifat mustahil bagi Allah ialah...", choices: ["Boleh berlaku", "Bertentangan dengan sifat wajib", "Sama seperti sifat wajib", "Tidak berkaitan"], correct: 1 },
-  { question: "Qidam bermaksud...", choices: ["Tiada permulaan", "Tiada pengakhiran", "Kekal", "Baru"], correct: 0 },
-  { question: "Fana' bermaksud...", choices: ["Berkekalan", "Ada permulaan", "Binasa/berakhir", "Tiada permulaan"], correct: 2 },
-  { question: "Hudus bermaksud...", choices: ["Baru/dicipta", "Sedia ada", "Tiada pengakhiran", "Tidak berubah"], correct: 0 },
-  { question: "Mengapakah Allah tidak bersifat Fana'?", choices: ["Kerana Allah kekal", "Kerana Allah dicipta", "Kerana Allah seperti makhluk", "Kerana Allah tiada permulaan"], correct: 0 },
-  { question: "Sifat Wajib Allah menunjukkan bahawa Allah...", choices: ["Boleh berubah", "Mempunyai kelemahan", "Sentiasa sempurna", "Dicipta oleh makhluk"], correct: 2 },
-  { question: "Apakah kesan memahami sifat Qidam Allah dalam kehidupan kita?", choices: ["Meniru sifat Allah", "Yakin Allah tiada permulaan", "Menganggap Allah berubah", "Ragu terhadap kekuasaan Allah"], correct: 1 },
-  { question: "Sifat Muhalafatuhu lil hawadith membuktikan bahawa Allah...", choices: ["Sama dengan manusia", "Seperti malaikat", "Berbeza dari segala makhluk", "Mempunyai rupa seperti manusia"], correct: 2 },
-  { question: "Allah bersifat Baqa'. Ini bermaksud Allah...", choices: ["Akan mati", "Kekal selamanya", "Ada permulaan", "Makhluk ciptaan"], correct: 1 },
-  { question: "Antara berikut, yang manakah bukan sifat mustahil bagi Allah?", choices: ["Hudus", "Fana'", "Wujud", "Mumathalatuhu lil hawadith"], correct: 2 },
-  { question: "Sifat Hudus bermakna sesuatu itu...", choices: ["Wujud dengan sendiri", "Baru dan dicipta", "Kekal selama-lamanya", "Tiada pencipta"], correct: 1 },
-  { question: "Allah tidak sama dengan makhluk-Nya kerana Allah bersifat...", choices: ["Qidam", "Muhalafatuhu lil hawadith", "Wujud", "Baqa'"], correct: 1 },
-  { question: "Mengapakah sifat mustahil penting difahami oleh pelajar?", choices: ["Untuk mengetahui kelemahan Allah", "Untuk membandingkan Allah dengan makhluk", "Untuk mengelak dari menyamakan Allah dengan makhluk", "Untuk meniru sifat Allah"], correct: 2 },
-  { question: "Apakah sifat lawan bagi 'Tiada permulaan'?", choices: ["Wujud", "Fana'", "Hudus", "Qidam"], correct: 2 }
-  
+  { question: "Apakah lawan kepada Baqa'?", choices: ["Qidam", "Fana'", "Hudus", "Wujud"], correct: 1 },
+  { question: "Apakah maksud Qidam?", choices: ["Tidak bermula", "Baru", "Ada akhir", "Tiada sifat"], correct: 0 },
+  { question: "Apakah lawan kepada Qidam?", choices: ["Hudus", "Fana'", "Mumathalatuhu lil hawadith", "Baru"], correct: 0 },
+  { question: "Apakah maksud Muhalafatuhu lil hawadith?", choices: ["Berbeza dengan makhluk", "Sama dengan makhluk", "Kekal", "Dicipta"], correct: 0 },
+  { question: "Apakah lawan kepada Muhalafatuhu lil hawadith?", choices: ["Hudus", "Mumathalatuhu lil hawadith", "Qidam", "Baqa'"], correct: 1 },
+  { question: "Baqa' ialah sifat wajib bagi siapa?", choices: ["Manusia", "Rasul", "Allah", "Malaikat"], correct: 2 },
+  { question: "Hudus bermaksud...", choices: ["Tiada permulaan", "Kekal", "Baru/dicipta", "Binasa"], correct: 2 },
+  { question: "Fana' bermaksud...", choices: ["Kekal", "Binasa/berakhir", "Tidak bermula", "Kuat"], correct: 1 },
+  { question: "Sifat wajib Allah yang menunjukkan Allah tidak sama seperti makhluk ialah...", choices: ["Qidam", "Wujud", "Muhalafatuhu lil hawadith", "Sama'"], correct: 2 },
+  { question: "Apakah maksud sifat mustahil bagi Allah?", choices: ["Mesti ada", "Boleh jadi", "Tidak layak bagi Allah", "Sama dengan wajib"], correct: 2 },
+  { question: "Allah tidak akan binasa. Ini bermaksud Allah bersifat...", choices: ["Qidam", "Baqa'", "Hudus", "Fana'"], correct: 1 },
+  { question: "Apakah sifat mustahil lawan kepada Qidam?", choices: ["Hudus", "Fana'", "Baqa'", "Wujud"], correct: 0 },
+  { question: "Apakah sifat wajib Allah yang menunjukkan Allah telah sedia ada?", choices: ["Hudus", "Fana'", "Qidam", "Sama'"], correct: 2 },
+  { question: "Sifat mustahil Allah iaitu Mumathalatuhu lil hawadith bermaksud...", choices: ["Berbeza dengan makhluk", "Sama dengan makhluk", "Tidak bermula", "Kekal"], correct: 1 },
+  { question: "Mengapa Muhalafatuhu lil hawadith itu penting untuk difahami?", choices: ["Supaya kita tahu Allah ciptaan makhluk", "Supaya kita tahu Allah sama seperti kita", "Supaya kita kenal keistimewaan Allah", "Supaya Allah ada bentuk"], correct: 2 },
+  { question: "Jika seseorang percaya Allah sama seperti makhluk, dia telah menolak sifat...", choices: ["Baqa'", "Qidam", "Muhalafatuhu lil hawadith", "Wujud"], correct: 2 },
+  { question: "Sifat Baqa' menolak kepercayaan bahawa Allah akan...", choices: ["Hidup", "Ada permulaan", "Binasa", "Sama dengan makhluk"], correct: 2 },
+  { question: "Sifat Hudus tidak layak bagi Allah kerana Allah...", choices: ["Sudah lama wujud", "Baru dicipta", "Tiada kuasa", "Perlu pembantu"], correct: 0 },
+  { question: "Percaya Allah tiada permulaan dan tidak berakhir bermaksud kita yakin dengan sifat...", choices: ["Qidam dan Fana'", "Hudus dan Baqa'", "Qidam dan Baqa'", "Hudus dan Qidam"], correct: 2 }
 ];
+
 
   function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
