@@ -89,8 +89,7 @@
     return array;
   }
 
-  const randomizedQuiz = shuffleArray([...quiz]);
-
+  let randomizedQuiz = shuffleArray([...quiz]);
   let current = 0;
   let score = 0;
 
@@ -98,8 +97,14 @@
     if (current >= randomizedQuiz.length) {
       const total = randomizedQuiz.length * 5;
       let msg = score === total ? "🌟 Hebat! Semua betul!" : score >= 60 ? "👍 Bagus! Cuba penuh markah!" : "📘 Teruskan berusaha!";
+      let resultHTML = `Markah akhir: ${score}/${total}<br>${msg}`;
+
+      if (score < total) {
+        resultHTML += `<br><button onclick="resetQuiz()">🔄 Cuba Lagi</button>`;
+      }
+
       document.getElementById("quiz").innerHTML = '';
-      document.getElementById("result").innerHTML = `Markah akhir: ${score}/${total}<br>${msg}`;
+      document.getElementById("result").innerHTML = resultHTML;
       return;
     }
 
@@ -137,6 +142,14 @@
       current++;
       loadQuestion();
     }, 1000);
+  }
+
+  function resetQuiz() {
+    current = 0;
+    score = 0;
+    randomizedQuiz = shuffleArray([...quiz]);
+    document.getElementById("result").innerHTML = '';
+    loadQuestion();
   }
 
   loadQuestion();
