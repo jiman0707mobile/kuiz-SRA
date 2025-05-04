@@ -191,8 +191,8 @@
   function loadQuestion() {
     if (current >= quiz.length) {
       const total = quiz.length * 5;
-      let msg = score === total ? "🌟 Hebat! Semua betul!" : score >= 90 ? "👍 Bagus! Cuba penuh markah!" : "📘 Teruskan berusaha!";
-      let restartBtn = score < 90 ? `<br><button onclick="startQuiz()">Buat Semula</button>` : '';
+      let msg = score === total ? "🌟 Hebat! Semua betul!" : score >= 95 ? "👍 Bagus! Cuba penuh markah!" : "📘 Teruskan berusaha!";
+      let restartBtn = score < 100 ? `<br><button onclick="startQuiz()">Buat Semula</button>` : '';
       document.getElementById("quiz").innerHTML = '';
       document.getElementById("result").innerHTML = `Markah akhir: ${score}/${total}<br>${msg}${restartBtn}`;
       return;
