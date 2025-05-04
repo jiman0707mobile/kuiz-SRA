@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <title>Kuiz Tauhid: Sifat Wajib & Mustahil</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #cceeff;
+      padding: 20px;
+      text-align: center;
+    }
+    .question-box {
+      background: #ffffff;
+      border: 2px solid #60a5fa;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px auto;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #2563eb;
+    }
+    .question-count {
+      font-weight: bold;
+      color: #1d4ed8;
+      margin-bottom: 10px;
+    }
+    button {
+      background-color: #3b82f6;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 8px;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 80%;
+      max-width: 400px;
+    }
+    button:hover {
+      background-color: #2563eb;
+    }
+    #result {
+      font-size: 22px;
+      font-weight: bold;
+      margin-top: 20px;
+      color: #059669;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🕌 Kuiz Tauhid: Sifat Wajib & Mustahil</h1>
+<div id="quiz"></div>
+<div id="result"></div>
+
+<script>
+const quiz = [
+  { question: "Apakah maksud Baqa'?", choices: ["Kekal selama-lamanya", "Ada permulaan", "Tidak kekal", "Berakhir"], correct: 0 },
+  { question: "Apakah lawan kepada Baqa'?", choices: ["Qidam", "Fana'", "Wujud", "Bashar"], correct: 1 },
+  { question: "Apakah maksud Qidam?", choices: ["Tidak bermula", "Baru", "Kekal", "Ada akhir"], correct: 0 },
+  { question: "Apakah lawan kepada Qidam?", choices: ["Baqa'", "Hudus", "Qiyamuhu Binafsih", "Sama'"], correct: 1 },
+  { question: "Apakah maksud Muhalafatuhu lil hawadith?", choices: ["Berbeza dengan makhluk", "Sama dengan manusia", "Makhluk yang hebat", "Sesuai dengan akal"], correct: 0 },
+  { question: "Apakah lawan kepada Muhalafatuhu lil hawadith?", choices: ["Hudus", "Fana'", "Mumathalatuhu lil hawadith", "Wujud"], correct: 2 },
+  { question: "Sifat mustahil bagi Allah ialah...", choices: ["Boleh berlaku", "Bertentangan dengan sifat wajib", "Sama seperti sifat wajib", "Tidak berkaitan"], correct: 1 },
+  { question: "Qidam bermaksud...", choices: ["Tiada permulaan", "Tiada pengakhiran", "Kekal", "Baru"], correct: 0 },
+  { question: "Fana' bermaksud...", choices: ["Berkekalan", "Ada permulaan", "Binasa/berakhir", "Tiada permulaan"], correct: 2 },
+  { question: "Hudus bermaksud...", choices: ["Baru/dicipta", "Sedia ada", "Tiada pengakhiran", "Tidak berubah"], correct: 0 },
+  { question: "Mengapakah Allah tidak bersifat Fana'?", choices: ["Kerana Allah kekal", "Kerana Allah dicipta", "Kerana Allah seperti makhluk", "Kerana Allah tiada permulaan"], correct: 0 },
+  { question: "Sifat Wajib Allah menunjukkan bahawa Allah...", choices: ["Boleh berubah", "Mempunyai kelemahan", "Sentiasa sempurna", "Dicipta oleh makhluk"], correct: 2 },
+  { question: "Apakah kesan memahami sifat Qidam Allah dalam kehidupan kita?", choices: ["Meniru sifat Allah", "Yakin Allah tiada permulaan", "Menganggap Allah berubah", "Ragu terhadap kekuasaan Allah"], correct: 1 },
+  { question: "Sifat Muhalafatuhu lil hawadith membuktikan bahawa Allah...", choices: ["Sama dengan manusia", "Seperti malaikat", "Berbeza dari segala makhluk", "Mempunyai rupa seperti manusia"], correct: 2 },
+  { question: "Allah bersifat Baqa'. Ini bermaksud Allah...", choices: ["Akan mati", "Kekal selamanya", "Ada permulaan", "Makhluk ciptaan"], correct: 1 },
+  { question: "Antara berikut, yang manakah bukan sifat mustahil bagi Allah?", choices: ["Hudus", "Fana'", "Wujud", "Mumathalatuhu lil hawadith"], correct: 2 },
+  { question: "Sifat Hudus bermakna sesuatu itu...", choices: ["Wujud dengan sendiri", "Baru dan dicipta", "Kekal selama-lamanya", "Tiada pencipta"], correct: 1 },
+  { question: "Allah tidak sama dengan makhluk-Nya kerana Allah bersifat...", choices: ["Qidam", "Muhalafatuhu lil hawadith", "Wujud", "Baqa'"], correct: 1 },
+  { question: "Mengapakah sifat mustahil penting difahami oleh pelajar?", choices: ["Untuk mengetahui kelemahan Allah", "Untuk membandingkan Allah dengan makhluk", "Untuk mengelak dari menyamakan Allah dengan makhluk", "Untuk meniru sifat Allah"], correct: 2 },
+  { question: "Apakah sifat lawan bagi 'Tiada permulaan'?", choices: ["Wujud", "Fana'", "Hudus", "Qidam"], correct: 2 }
+  
+];
+
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  let randomizedQuiz = shuffleArray([...quiz]);
+  let current = 0;
+  let score = 0;
+
+  function loadQuestion() {
+    if (current >= randomizedQuiz.length) {
+      const total = randomizedQuiz.length * 5;
+      let msg = score === total ? "🌟 Hebat! Semua betul!" : score >= 60 ? "👍 Bagus! Cuba penuh markah!" : "📘 Teruskan berusaha!";
+      let resultHTML = `Markah akhir: ${score}/${total}<br>${msg}`;
+
+      if (score < total) {
+        resultHTML += `<br><button onclick="resetQuiz()">🔄 Cuba Lagi</button>`;
+      }
+
+      document.getElementById("quiz").innerHTML = '';
+      document.getElementById("result").innerHTML = resultHTML;
+      return;
+    }
+
+    const q = randomizedQuiz[current];
+    let html = `
+      <div class="question-box">
+        <div class="question-count">Soalan ${current + 1} / ${randomizedQuiz.length}</div>
+        <h3>${q.question}</h3>
+    `;
+    q.choices.forEach((c, i) => {
+      html += `<button onclick="checkAnswer(${i})">${c}</button>`;
+    });
+    html += `</div>`;
+    document.getElementById("quiz").innerHTML = html;
+  }
+
+  function checkAnswer(selected) {
+    const q = randomizedQuiz[current];
+    const feedback = document.createElement('div');
+    feedback.style.fontWeight = 'bold';
+    feedback.style.marginTop = '10px';
+
+    if (selected === q.correct) {
+      feedback.style.color = '#10b981';
+      feedback.textContent = "✅ Betul! +5 markah";
+      score += 5;
+    } else {
+      feedback.style.color = '#ef4444';
+      feedback.textContent = "❌ Salah.";
+    }
+
+    document.querySelector(".question-box").appendChild(feedback);
+
+    setTimeout(() => {
+      current++;
+      loadQuestion();
+    }, 1000);
+  }
+
+  function resetQuiz() {
+    current = 0;
+    score = 0;
+    randomizedQuiz = shuffleArray([...quiz]);
+    document.getElementById("result").innerHTML = '';
+    loadQuestion();
+  }
+
+  loadQuestion();
+</script>
+  
+</body>
+</html>
