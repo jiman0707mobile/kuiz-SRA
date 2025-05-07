@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <title>Kuiz Jawi</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #cceeff;
+      padding: 20px;
+      text-align: center;
+    }
+    .question-box {
+      background: #ffffff;
+      border: 2px solid #60a5fa;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px auto;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #2563eb;
+    }
+    .question-count {
+      font-weight: bold;
+      color: #1d4ed8;
+      margin-bottom: 10px;
+    }
+    button {
+      background-color: #3b82f6;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 8px;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 80%;
+      max-width: 400px;
+    }
+    button:hover {
+      background-color: #2563eb;
+    }
+    #result {
+      font-size: 22px;
+      font-weight: bold;
+      margin-top: 20px;
+      color: #059669;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🕌 Kuiz Tajwid Tahun 3</h1>
+<div id="quiz"></div>
+<div id="result"></div>
+<div id="feedback"></div>
+
+<script>
+const originalQuiz = [
+  {
+    question: "Huruf-huruf yang keluar dari Makhraj Al-Jaufi ialah:",
+    options: ["Alif, Wau, Ya", "Alif, Ba, Ta", "Wau, Ha, Ya", "Alif, Ha, Kha"],
+    answer: 0
+  },
+  {
+    question: "Makhraj Al-Jaufi terletak di bahagian:",
+    options: ["Tekak bawah", "Pangkal lidah", "Rongga mulut", "Hidung"],
+    answer: 2
+  },
+  {
+    question: "Huruf \u0648 dengan baris di atas keluar dari:",
+    options: ["Hidung", "Halqi", "Jauf", "Lidah"],
+    answer: 2
+  },
+  {
+    question: "Huruf \u064a dengan baris bawah disebut dari:",
+    options: ["Hujung lidah", "Pangkal tekak", "Rongga mulut", "Hidung"],
+    answer: 2
+  },
+  {
+    question: "Contoh kalimah yang mengandungi huruf dari Makhraj Al-Jaufi ialah:",
+    options: ["نُورٌ", "حَجّ", "مَاء", "كِتَاب"],
+    answer: 2
+  },
+  {
+    question: "Makhraj Khalqi bermaksud huruf keluar dari:",
+    options: ["Lidah", "Tekak", "Rongga mulut", "Hidung"],
+    answer: 1
+  },
+  {
+    question: "Huruf-huruf Halqi keluar dari:",
+    options: ["Tekak", "Dada", "Bibir", "Hidung"],
+    answer: 0
+  },
+  {
+    question: "Huruf yang keluar dari pangkal tekak ialah:",
+    options: ["Ha dan Kha", "Alif dan Wau", "Hamzah dan Ha", "Ain dan Ghain"],
+    answer: 2
+  },
+  {
+    question: "Huruf \u063a dan \u0639 keluar dari:",
+    options: ["Tengah tekak", "Pangkal tekak", "Hujung lidah", "Rongga mulut"],
+    answer: 0
+  },
+  {
+    question: "Huruf tengah tekak ialah:",
+    options: ["Ha dan Kha", "Ain dan Ghain", "Alif dan Wau", "Fa dan Qaf"],
+    answer: 1
+  },
+  {
+    question: "Huruf akhir tekak ialah:",
+    options: ["Ha dan Kha", "Ain dan Ghain", "Wau dan Ya", "Ba dan Ta"],
+    answer: 0
+  },
+  {
+    question: "Berapa huruf dalam Makhraj Khalqi?",
+    options: ["3", "5", "6", "7"],
+    answer: 2
+  },
+  {
+    question: "Huruf \u062d dan \u062e berasal dari:",
+    options: ["Rongga mulut", "Pangkal tekak", "Hidung", "Akhir tekak"],
+    answer: 3
+  },
+  {
+    question: "Huruf-huruf Halqi dikenali kerana keluar dari:",
+    options: ["Lidah", "Rongga mulut", "Tekak", "Gigi"],
+    answer: 2
+  },
+  {
+    question: "Huruf Jauf hanya dibaca apabila ada:",
+    options: ["Sukun", "Baris", "Madd", "Tanwin"],
+    answer: 2
+  },
+
+  // ⚡ Soalan mencabar bermula di sini:
+  {
+    question: "⚡ Antara berikut, manakah bukan huruf dari Makhraj Al-Jaufi?",
+    options: ["Wau", "Ya", "Alif", "Ain"],
+    answer: 3
+  },
+  {
+    question: "⚡ 'مَاءٌ' mengandungi huruf Madd dari Makhraj mana?",
+    options: ["Jauf", "Lidah", "Halqi", "Khalqi"],
+    answer: 0
+  },
+  {
+    question: "⚡ Mengapakah huruf Makhraj Al-Jaufi disebut huruf Madd?",
+    options: ["Kerana panjang", "Kerana halus", "Kerana lembut", "Kerana keluar dari hidung"],
+    answer: 0
+  },
+  {
+    question: "⚡ Makhraj Halqi juga disebut sebagai:",
+    options: ["Makhraj Rongga", "Makhraj Hidung", "Makhraj Tekak", "Makhraj Lidah"],
+    answer: 2
+  },
+  {
+    question: "⚡ Gabungan huruf 'غَافِر' menunjukkan penggunaan Makhraj:",
+    options: ["Jauf dan Lidah", "Halqi dan Jauf", "Hidung dan Halqi", "Lidah dan Halqi"],
+    answer: 1
+  }
+];
+
+
+let quiz = [];
+let current = 0;
+let score = 0;
+
+function shuffle(array) {
+  let copy = [...array];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+function loadQuestion() {
+  if (current >= quiz.length) {
+    const total = quiz.length * 5;
+    let msg = score === total ? "🌟 Hebat! Semua betul!" : score >= 90 ? "👍 Bagus! Cuba capai 100 markah!" : "📘 Cuba lagi untuk lebih baik!";
+    let html = `<div id="result">Markah akhir: ${score}/${total}<br>${msg}</div>`;
+    if (score < 90) {
+      html += `<br><button onclick="restartQuiz()">Cuba Lagi</button>`;
+    }
+    document.getElementById("quiz").innerHTML = html;
+    document.getElementById("feedback").innerText = "";
+    return;
+  }
+
+  const q = quiz[current];
+  let html = `
+    <div class="question-box">
+      <div class="question-count">Soalan ${current + 1} / ${quiz.length}</div>
+      <h3>${q.question}</h3>
+  `;
+  q.options.forEach((c, i) => {
+    html += `<button onclick="checkAnswer(${i})">${c}</button>`;
+  });
+  html += `</div>`;
+  document.getElementById("quiz").innerHTML = html;
+  document.getElementById("feedback").innerText = "";
+}
+
+function checkAnswer(selected) {
+  const q = quiz[current];
+  if (selected === q.answer) {
+    score += 5;
+    document.getElementById("feedback").innerText = "✅ Betul!";
+  } else {
+    document.getElementById("feedback").innerText = `❌ Salah. Jawapan yang betul: ${q.options[q.answer]}`;
+  }
+  current++;
+  setTimeout(loadQuestion, 1200);
+}
+
+function restartQuiz() {
+  quiz = shuffle(originalQuiz).slice(0, 20);
+  current = 0;
+  score = 0;
+  loadQuestion();
+}
+
+// Mula kuiz
+restartQuiz();
+</script>
+
+  
+</body>
+</html>
